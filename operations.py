@@ -36,7 +36,6 @@ def get_neig_data(pxp:pexpect.spawn):
     pxp.sendline("show cdp neig det")
     pxp.expect("Total cdp entries displayed : ")
     data = pxp.before.decode("utf-8")
-    # pxp.expect([".*>", ".*#"])
     print ("Данные полученны")
     return data
 
