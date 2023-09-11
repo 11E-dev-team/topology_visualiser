@@ -1,2 +1,2 @@
-def build_topology ():
-    print ("0")
+def build_topology():
+    print("0")

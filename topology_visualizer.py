@@ -1,2 +1,2 @@
-def visualize_topolgy ():
-    print ("0")
+def visualize_topolgy():
+    print("0")
