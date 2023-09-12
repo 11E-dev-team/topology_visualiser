@@ -79,7 +79,7 @@ def get_neig_data(pxp: expect_lib.spawn):
     print("Получение данныx с устройства...")
     pxp.sendline("show cdp neig det")
     pxp.expect("Total cdp entries displayed : ")
-    data = pxp.before.decode("utf-8")
+    data = pxp.before
     # pxp.expect([".*>", ".*#"])
     print("Данные полученны")
     return data
@@ -102,12 +102,14 @@ def parse_neighbors(output: str):
     return matches
 
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False):
+    start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp)
     enter_privileged_mode(pxp)
     stack = parse_neighbors(get_neig_data(pxp)) 
     visited = []
     while stack:
         device = stack.pop(0)
         start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp)
+        enter_privileged_mode(pxp)
         neighs = parse_neighbors(get_neig_data(pxp))
         for neigh in neighs:
             if neigh['ip'] not in visited:

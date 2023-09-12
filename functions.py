@@ -22,7 +22,7 @@ def create_snapshot():
     with open(filename, "w") as f:
         f.write(dialog.csv_columns)
 
-    with open('snapshots/most_recent') as f:
+    with open('snapshots/most_recent', "w") as f:
         f.write(filename)
 
     return filename
