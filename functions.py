@@ -23,8 +23,16 @@ def create_snapshot():
 
 def add_data_to_snapshot(snapshot_name, data):
     print (f"Редактирование {snapshot_name}")
-    with open(snapshot_name, "w") as f:
-        f.write()
+    with open(snapshot_name, "a+") as f:
+        text = f.read()
+        for device in data:
+            if device["device_id"] not in text:
+                to_write = (device["device_id"]
+                            + "," + device["ip"]
+                            + "," + device["software"]
+                            + "," + device["version"]
+                )
+                f.write(to_write)
 
 def select_device(snapshot_name):
     with open(snapshot_name, "r") as f:
@@ -39,8 +47,9 @@ def select_device(snapshot_name):
 def select_params(snapshot_name):
     with open(snapshot_name, "r") as f:
         c = 1
-        params = #list of params
+        params = 
         for param in params:
             print (f"{c} - {param}")
     answer = input("Выберите параметры")
     return answer
+
