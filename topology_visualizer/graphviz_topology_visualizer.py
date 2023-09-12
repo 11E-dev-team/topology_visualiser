@@ -57,22 +57,23 @@ class GraphvizTopologyVisualizer(TopologyVisualizer):
                 + list(self.topology.values())
             ]
         )
-        graph = gv.Graph(format="svg")
+        graphs = gv.Graph(format="svg"), gv.Graph(format="png")
 
-        for node in nodes:
-            graph.node(node)
+        for graph in graphs:
+            for node in nodes:
+                graph.node(node)
 
-        for key, value in self.topology.items():
-            head, t_label = key
-            tail, h_label = value
-            graph.edge(
-                head,
-                tail,
-                headlabel=h_label,
-                taillabel=t_label,
-                label=" " * 12,
-            )
+            for key, value in self.topology.items():
+                head, t_label = key
+                tail, h_label = value
+                graph.edge(
+                    head,
+                    tail,
+                    headlabel=h_label,
+                    taillabel=t_label,
+                    label=" " * 12,
+                )
 
-        graph = apply_styles(graph, style)
-        filename = graph.render(filename=filename)
+            graph = apply_styles(graph, style)
+            filename = graph.render(filename=filename)
         return filename

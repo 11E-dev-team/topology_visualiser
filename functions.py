@@ -1,38 +1,40 @@
 import dialog
-import time
+import datetime
 from pandas import *
 
-def select_snapshot():
-    answer = input (dialog.init)
-    match answer:
-        case "1":
-            print ("Инициализировать сеть")
-        case "2":
-            print ("Использовать последний снапшот")
-        case "3":
-            print ("Выбрать снапшот")
-    return snap
+# def select_snapshot():
+#     answer = input (dialog.init)
+#     match answer:
+#         case "1":
+#             print ("Инициализировать сеть")
+#         case "2":
+#             print ("Использовать последний снапшот")
+#         case "3":
+#             print ("Выбрать снапшот")
+#     return snap
 
 def create_snapshot():
     print ("Создание снапшота")
-    filename = f"snapshots/net_snapshot{time}.csv"
+    filename = f"snapshots/net_snapshot{str(datetime.datetime.now()).replace(':', '-')}.csv"
     with open(filename, "w") as f:
         f.write(dialog.csv_columns)
 
+    with open('snapshots/most_recent') as f:
+        f.write(filename)
+
     return filename
 
-def add_data_to_snapshot(snapshot_name, data):
+def add_data_to_snapshot(snapshot_name, device):
     print (f"Редактирование {snapshot_name}")
     with open(snapshot_name, "a+") as f:
         text = f.read()
-        for device in data:
-            if device["device_id"] not in text:
-                to_write = (device["device_id"]
-                            + "," + device["ip"]
-                            + "," + device["software"]
-                            + "," + device["version"]
-                )
-                f.write(to_write)
+        if device["device_id"] not in text:
+            to_write = (device["device_id"]
+                        + "," + device["ip"]
+                        + "," + device["software"]
+                        + "," + device["version"]
+            )
+            f.write(to_write)
 
 def select_device(snapshot_name):
     with open(snapshot_name, "r") as f:

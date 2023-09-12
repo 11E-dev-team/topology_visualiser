@@ -4,15 +4,16 @@ from config import expect_lib
 import re
 
 
-def start_ssh(ip, login, password, spawn=None):
-    if spawn != None:
+def start_ssh(ip, login, password, pxp=None):
+    if pxp is not None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
-        pxp = spawn.sendline(f"ssh {login}@{ip}")
+        pxp.sendline(f"ssh {login}@{ip}")
     result = pxp.expect(["password:", "(yes/no)"])
     if result == 1:
             pxp.sendline("yes")
     pxp.sendline(f"{password}")
+    pxp.sendline("terminal length 0")
     return pxp
 
 
@@ -100,15 +101,23 @@ def parse_neighbors(output: str):
             matches.append(match.groupdict())
     return matches
 
-def roam_net(pxp: expect_lib.spawn):
+def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False):
     enter_privileged_mode(pxp)
     stack = parse_neighbors(get_neig_data(pxp)) 
+    visited = []
     while stack:
-        pass
+        device = stack.pop(0)
+        start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp)
+        neighs = parse_neighbors(get_neig_data(pxp))
+        for neigh in neighs:
+            if neigh['ip'] not in visited:
+                stack.append(neigh)
+            if send_connections:
+                yield ((device["device_id"], neigh["port_id"]), (neigh["device_id"], neigh["interface_id"]))
+        visited.append(neigh['ip'])
+        if not send_connections:
+            yield device
+        pxp.sendline('exit')
 
-def match_neighbors(data):
-    print("Поиск соседей...")
-    neighbors = []
-    return neighbors
 
 
