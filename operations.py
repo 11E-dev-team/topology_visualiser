@@ -5,13 +5,13 @@ import re
 
 
 def start_ssh(ip, login, password, pxp=None):
-    if pxp is not None:
+    if pxp is None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
         pxp.sendline(f"ssh {login}@{ip}")
     result = pxp.expect(["password:", "(yes/no)"])
     if result == 1:
-            pxp.sendline("yes")
+        pxp.sendline("yes")
     pxp.sendline(f"{password}")
     pxp.sendline("terminal length 0")
     return pxp

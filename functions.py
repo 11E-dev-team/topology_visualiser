@@ -1,6 +1,7 @@
 import dialog
 import datetime
 from pandas import *
+import os
 
 # def select_snapshot():
 #     answer = input (dialog.init)
@@ -15,6 +16,8 @@ from pandas import *
 
 def create_snapshot():
     print ("Создание снапшота")
+    if not os.path.isdir("snapshots"):
+        os.mkdir("snapshots")
     filename = f"snapshots/net_snapshot{str(datetime.datetime.now()).replace(':', '-')}.csv"
     with open(filename, "w") as f:
         f.write(dialog.csv_columns)
