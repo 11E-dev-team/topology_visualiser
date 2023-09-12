@@ -4,6 +4,15 @@ from config import expect_lib
 import re
 
 
+class DeviceInfo:
+    ip_address: str
+    device_id: str
+    interface: str
+    port_id: str
+
+    software: str
+    version: str
+
 def start_telnet(ip: str, port: str):
     print(f"Подключение к {ip} {port}...")
     pxp = expect_lib.spawn(f"telnet {ip} {port}")
@@ -45,15 +54,31 @@ def get_neig_data(pxp: expect_lib.spawn):
     print("Данные полученны")
     return data
 
+def parse_neighbors(output: str):
+    matches = []
+    for block in output.split("-------------------------"):
+        match = re.search(
+            r"Device ID ?: ?(?P<device_id>\w+)"
+            r".+IP address ?: ?(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+            r".+Interface ?: ?(?P<interface>\S+)"
+            r".+Port ID \(outgoing port\) ?: ?(?P<port_id>\S+)"
+            r".+Software \((?P<software>\S+)\)"
+            r".+Version (?P<version>.+?)(,\s|$)$",
+            block,
+            re.DOTALL | re.MULTILINE,
+        )
+        if match:
+            matches.append(match.groupdict())
+    return matches
 
-class DeviceInfo:
-    ip_address: str
-    device_id: str
-    interface: str
-    port_id: str
+def roam_net(pxp: expect_lib.spawn):
+    enter_privileged_mode(pxp)
+    stack = parse_neighbors(get_neig_data(pxp)) 
+    while stack:
+        pass
 
-    software: str
-    version: str
+
+
 
 
 def match_neighbors(data):
@@ -64,3 +89,4 @@ def match_neighbors(data):
 
 def match_neighbours(data):
     return match_neighbors(data)
+
