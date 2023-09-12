@@ -5,7 +5,7 @@ import re
 
 
 def start_ssh(ip, login, password, spawn=None):
-    if spawn != None:
+    if spawn == None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
         pxp = spawn.sendline(f"ssh {login}@{ip}")
