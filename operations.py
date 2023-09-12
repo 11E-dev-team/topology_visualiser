@@ -4,12 +4,17 @@ from config import expect_lib
 import re
 
 
-def start_ssh(ip, login, password):
-    pxp = expect_lib.spawn(f"ssh {login}@{ip}")
+def start_ssh(ip, login, password, spawn=None):
+    if spawn != None:
+        pxp = expect_lib.spawn(f"ssh {login}@{ip}")
+    else:
+        pxp = spawn.sendline(f"ssh {login}@{ip}")
     result = pxp.expect(["password:", "(yes/no)"])
     if result == 1:
             pxp.sendline("yes")
     pxp.sendline(f"{password}")
+    return pxp
+
 
 # class DeviceInfo:
 #     ip_address: str
@@ -106,7 +111,4 @@ def match_neighbors(data):
     neighbors = []
     return neighbors
 
-
-def match_neighbours(data):
-    return match_neighbors(data)
 
