@@ -21,4 +21,5 @@ def create_snapshot():
 
 def add_data_to_snapshot(snapshot_name, data):
     print (f"Редактирование {snapshot_name}")
-    
+    with open(snapshot_name, "w") as f:
+        f.write()
