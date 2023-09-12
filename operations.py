@@ -4,11 +4,11 @@ from config import expect_lib
 import re
 
 
-def start_ssh(ip, login, password, spawn=None):
-    if spawn == None:
+def start_ssh(ip, login, password, pxp=None):
+    if pxp == None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
-        pxp = spawn.sendline(f"ssh {login}@{ip}")
+        pxp.sendline(f"ssh {login}@{ip}")
     result = pxp.expect(["password:", "(yes/no)"])
     if result == 1:
             pxp.sendline("yes")
