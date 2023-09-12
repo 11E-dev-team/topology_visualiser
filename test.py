@@ -83,7 +83,6 @@ def test2 ():
 
         """)
     
-
 from topology_visualizer import visualize_topolgy
 
 d = {("R4", "Eth0/1"): ("R5", "Eth0/1"),
@@ -92,3 +91,4 @@ def test3 (d):
     visualize_topolgy(d)
     
 test3(d)
+
