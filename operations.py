@@ -3,23 +3,30 @@ from config import expect_lib
 # from pexpect import popen_spawn
 import re
 
-
-def start_telnet(ip: str, port: str):
-    print(f"Подключение к {ip} {port}...")
-    pxp = expect_lib.spawn(f"telnet {ip} {port}")
-    # pxp.expect("Escape")
-    pxp.sendline("\n")
-    result = pxp.expect([".*>", ".*#", expect_lib.TIMEOUT])
-    if result == -1:
-        print("TIMEOUT")
-    else:
-        print(f"Подключен к {ip} {port}")
-    if result == 0:
-        enter_privileged_mode(pxp)
-    pxp.sendline("terminal length 0")
-    pxp.expect([".*>", ".*#"])
-    print("Включен режим полного вывода")
+def start_ssh(ip, login, password):
+    pxp = expect_lib.spawn(f"ssh {login}@{ip}")
+    result = pxp.expect(["password:", "(yes/no)"])
+    if result == 1:
+            pxp.sendline("yes")
+    pxp.sendline(f"{password}")
     return pxp
+
+# def start_telnet(ip: str, port: str):
+#     print(f"Подключение к {ip} {port}...")
+#     pxp = expect_lib.spawn(f"telnet {ip} {port}")
+#     # pxp.expect("Escape")
+#     pxp.sendline("\n")
+#     result = pxp.expect([".*>", ".*#", expect_lib.TIMEOUT])
+#     if result == -1:
+#         print("TIMEOUT")
+#     else:
+#         print(f"Подключен к {ip} {port}")
+#     if result == 0:
+#         enter_privileged_mode(pxp)
+#     pxp.sendline("terminal length 0")
+#     pxp.expect([".*>", ".*#"])
+#     print("Включен режим полного вывода")
+#     return pxp
 
 
 def enter_privileged_mode(pxp: expect_lib.spawn):
@@ -40,7 +47,7 @@ def get_neig_data(pxp: expect_lib.spawn):
     print("Получение данныx с устройства...")
     pxp.sendline("show cdp neig det")
     pxp.expect("Total cdp entries displayed : ")
-    data = pxp.before  # .decode("utf-8")
+    data = pxp.before.decode("utf-8")
     # pxp.expect([".*>", ".*#"])
     print("Данные полученны")
     return data
