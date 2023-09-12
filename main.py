@@ -1,6 +1,3 @@
-from topology_builder import build_topology
-from topology_visualizer import visualize_topolgy
-
 from topology_visualizer.igraph_topology_visualizer import IgraphTopologyVisualizer as default_visualizer
 # from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer as default_vizualizer
 
