@@ -47,7 +47,7 @@ def select_device(snapshot_name):
 def select_params(snapshot_name):
     with open(snapshot_name, "r") as f:
         c = 1
-        params = 
+        params = []
         for param in params:
             print (f"{c} - {param}")
     answer = input("Выберите параметры")
