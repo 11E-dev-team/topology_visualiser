@@ -1,6 +1,9 @@
 from topology_builder import build_topology 
 from topology_visualizer import visualize_topolgy
 
+from topology_visualizer.igraph_topology_visualizer import IgraphTopologyVisualizer as default_visualizer
+# from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer as default_vizualizer
+
 import operations as op
 
 if __name__ == "__main__":
@@ -16,6 +19,7 @@ if __name__ == "__main__":
                 pxp = op.start_telnet(input("ip: "), input("port: "))
                 data = op.get_neig_data(pxp)
                 pr_data = op.match_neigbours(data)
+                graph = default_visualizer(connections)
                 build_topology()
             case "0":
                 print ("Выход из программы")
