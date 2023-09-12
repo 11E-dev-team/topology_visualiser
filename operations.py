@@ -1,4 +1,4 @@
-import wexpect
+from config import expect_lib
 
 # from pexpect import popen_spawn
 import re
@@ -6,10 +6,10 @@ import re
 
 def start_telnet(ip: str, port: str):
     print(f"Подключение к {ip} {port}...")
-    pxp = wexpect.spawn(f"telnet {ip} {port}")
+    pxp = expect_lib.spawn(f"telnet {ip} {port}")
     # pxp.expect("Escape")
     pxp.sendline("\n")
-    result = pxp.expect([".*>", ".*#", wexpect.TIMEOUT])
+    result = pxp.expect([".*>", ".*#", expect_lib.TIMEOUT])
     if result == -1:
         print("TIMEOUT")
     else:
@@ -22,7 +22,7 @@ def start_telnet(ip: str, port: str):
     return pxp
 
 
-def enter_privileged_mode(pxp: wexpect.spawn):
+def enter_privileged_mode(pxp: expect_lib.spawn):
     print("Вход в привелигированный режим...")
     pxp.sendline("enable")
     result = pxp.expect([".*#", "Password"])
@@ -36,7 +36,7 @@ def enter_privileged_mode(pxp: wexpect.spawn):
     print("Accesed")
 
 
-def get_neig_data(pxp: wexpect.spawn):
+def get_neig_data(pxp: expect_lib.spawn):
     print("Получение данныx с устройства...")
     pxp.sendline("show cdp neig det")
     pxp.expect("Total cdp entries displayed : ")
