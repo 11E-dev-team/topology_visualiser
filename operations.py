@@ -4,7 +4,7 @@ from config import expect_lib
 import re
 
 
-def start_ssh(ip, login, password, pxp=None):
+def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None) -> expect_lib.spawn:
     if pxp is None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
