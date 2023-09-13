@@ -127,12 +127,11 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
         for neigh in neighs:
             if neigh['ip'] not in visited:
                 stack.append(neigh)
-            if send_connections:
+            elif send_connections:
                 name_in = f'{device["ip"]} - {device["device_id"]}'
                 name_out = f'{neigh["ip"]} - {neigh["device_id"]}'
                 yield ((name_in, neigh["port_id"]), (name_out, neigh["interface"]))
-        print(visited)
-        
+        visited.append(device['ip'])
         if not send_connections:
             yield device
         print('Возврат к внешней машине')
