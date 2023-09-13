@@ -2,6 +2,7 @@ from topology_visualizer.igraph_topology_visualizer import IgraphTopologyVisuali
 # from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer as default_vizualizer
 
 import dialog
+import os
 
 import functions as fu
 import operations as op
@@ -13,9 +14,26 @@ if __name__ == "__main__":
         match answer:
             case "1":
                 print ("Инициализировать сеть")
-                snapshot_name = fu.create_snapshot()
-                main_pxp = op.start_ssh(input("ip: "), input("login: "), getpass("password: "))
+                if os.path.isfile("login_data.txt"):
+                    use_saved_login_data = input("Использовать сохрененные данные для входа в сеть? [Д/н]: ")
+                    if not use_saved_login_data or use_saved_login_data.find("н") != -1:
+                        with open("login_data.txt") as f:
+                            login_data = f.readlines()[:3]
+                    else:
+                        login_data = [input("ip: "), input("login: "), getpass("password: ")]
+                else:
+                    login_data = [input("ip: "), input("login: "), getpass("password: ")]
+                main_pxp = op.start_ssh(login_data[0], login_data[1], login_data[2])
                 print('Подключение к первой машине в сети')
+                if os.path.isfile("login_data1.txt"):
+                    use_saved_login_data = input("Использовать сохрененные данные для входа в сеть? [Д/н]: ")
+                    if not use_saved_login_data or use_saved_login_data.find("н") != -1:
+                        with open("login_data1.txt") as f:
+                            login_data = f.readlines()[:3]
+                    else:
+                        login_data = [input("ip: "), input("login: "), getpass("password: ")]
+                else:
+                    login_data = [input("ip: "), input("login: "), getpass("password: ")]
                 for device in op.roam_net(pxp=main_pxp, entry_ip=input("ip: "), 
                                           username=input('login: '), password=getpass('password: '), 
                                           send_connections=False):
