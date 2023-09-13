@@ -4,7 +4,7 @@ from config import expect_lib
 import re
 
 
-def start_ssh(ip, login, password, pxp=None):
+def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None) -> expect_lib.spawn:
     if pxp is None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
@@ -75,7 +75,7 @@ def enter_privileged_mode(pxp: expect_lib.spawn):
     print("Accesed")
 
 
-def get_neig_data(pxp: expect_lib.spawn):
+def get_neig_data(pxp: expect_lib.spawn) -> str:
     print("Получение данныx с устройства...")
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
@@ -85,7 +85,7 @@ def get_neig_data(pxp: expect_lib.spawn):
     print("Данные полученны")
     return data
 
-def parse_neighbors(output: str):
+def parse_neighbors(output: str) -> dict:
     matches = []
     for block in output.split("-------------------------"):
         match = re.search(
