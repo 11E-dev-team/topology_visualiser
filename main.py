@@ -14,17 +14,17 @@ if __name__ == "__main__":
         match answer:
             case "1":
                 print ("Инициализировать сеть")
+                snapshot_name = fu.create_snapshot()
 
                 userdata = dialog.net_access_user_data()
                 outer_ip, outer_login, outer_password = userdata['outer']
                 entry_ip, entry_login, entry_password = userdata['entry']
                 
                 main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
-                
-                for device in op.roam_net(pxp=main_pxp, entry_ip=entry_ip, 
-                                          username=entry_login, password=entry_password, 
-                                          send_connections=False):
-                    fu.add_data_to_snapshot(snapshot_name, op.parse_neighbors(device))
+                fu.add_data_to_snapshot(snapshot_name, 
+                                        op.roam_net(pxp=main_pxp, entry_ip=entry_ip, 
+                                                    username=entry_login, password=entry_password, 
+                                                    send_connections=False))
             case "2":
                 print ("Построить топологию сети")
                 userdata = dialog.net_access_user_data()

@@ -2,6 +2,7 @@ import dialog
 import datetime
 from pandas import *
 import os
+from typing import Iterable
 
 # def select_snapshot():
 #     answer = input (dialog.init)
@@ -27,7 +28,7 @@ def create_snapshot() -> str:
 
     return filename
 
-def add_data_to_snapshot(snapshot_name: str, devices: list[dict]):
+def add_data_to_snapshot(snapshot_name: str, devices: Iterable[dict]):
     print (f"Редактирование {snapshot_name}")
     with open(snapshot_name, "a+") as f:
         text = f.read()
