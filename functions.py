@@ -4,16 +4,9 @@ from pandas import *
 import os
 from typing import Iterable
 
-# def select_snapshot():
-#     answer = input (dialog.init)
-#     match answer:
-#         case "1":
-#             print ("Инициализировать сеть")
-#         case "2":
-#             print ("Использовать последний снапшот")
-#         case "3":
-#             print ("Выбрать снапшот")
-#     return snap
+def select_snapshot():
+    snapshots = os.listdir('snapshots')
+    snapshots.remove('most_recent')
 
 def create_snapshot() -> str:
     print ("Создание снапшота")
