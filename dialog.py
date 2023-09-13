@@ -17,7 +17,7 @@ init = """
 2 - Использовать последний снапшот
 3 - Выбрать снапшот\n
 """
-csv_columns = "Device ID,IP address,Platform,Capabilities,Interface,Port ID,Version,Technicalsupport,Advertisment version,IP address"
+csv_columns = "Device ID;IP address;Software;Version\n"
 
 
 def net_access_user_data():
