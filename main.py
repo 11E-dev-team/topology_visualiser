@@ -14,37 +14,28 @@ if __name__ == "__main__":
         match answer:
             case "1":
                 print ("Инициализировать сеть")
-                if os.path.isfile("login_data.txt"):
-                    use_saved_login_data = input("Использовать сохрененные данные для входа в сеть? [Д/н]: ")
-                    if not use_saved_login_data or use_saved_login_data.find("н") != -1:
-                        with open("login_data.txt") as f:
-                            login_data = f.readlines()[:3]
-                    else:
-                        login_data = [input("ip: "), input("login: "), getpass("password: ")]
-                else:
-                    login_data = [input("ip: "), input("login: "), getpass("password: ")]
-                main_pxp = op.start_ssh(login_data[0], login_data[1], login_data[2])
-                print('Подключение к первой машине в сети')
-                if os.path.isfile("login_data1.txt"):
-                    use_saved_login_data = input("Использовать сохрененные данные для входа в сеть? [Д/н]: ")
-                    if not use_saved_login_data or use_saved_login_data.find("н") != -1:
-                        with open("login_data1.txt") as f:
-                            login_data = f.readlines()[:3]
-                    else:
-                        login_data = [input("ip: "), input("login: "), getpass("password: ")]
-                else:
-                    login_data = [input("ip: "), input("login: "), getpass("password: ")]
-                for device in op.roam_net(pxp=main_pxp, entry_ip=input("ip: "), 
-                                          username=input('login: '), password=getpass('password: '), 
+
+                userdata = dialog.net_access_user_data()
+                outer_ip, outer_login, outer_password = userdata['outer']
+                entry_ip, entry_login, entry_password = userdata['entry']
+                
+                main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
+                
+                for device in op.roam_net(pxp=main_pxp, entry_ip=entry_ip, 
+                                          username=entry_login, password=entry_password, 
                                           send_connections=False):
                     fu.add_data_to_snapshot(snapshot_name, op.parse_neighbors(device))
             case "2":
                 print ("Построить топологию сети")
-                main_pxp = op.start_ssh(input("ip: "), input("login: "), getpass("password: "))
+                userdata = dialog.net_access_user_data()
+                outer_ip, outer_login, outer_password = userdata['outer']
+                entry_ip, entry_login, entry_password = userdata['entry']
+
+                main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
                 print('Подключение к первой машине в сети')
                 connections = {key: value for key, value in op.roam_net(
-                    pxp=main_pxp, entry_ip=input("ip: "), username=input('login: '), 
-                    password=getpass('password: '), send_connections=True
+                    pxp=main_pxp, entry_ip=entry_ip, username=entry_login, 
+                    password=entry_password, send_connections=True
                 )}
                 print(connections)
                 for key, value in list(connections.items()):
