@@ -14,7 +14,7 @@ import os
 #             print ("Выбрать снапшот")
 #     return snap
 
-def create_snapshot():
+def create_snapshot() -> str:
     print ("Создание снапшота")
     if not os.path.isdir("snapshots"):
         os.mkdir("snapshots")
@@ -27,7 +27,7 @@ def create_snapshot():
 
     return filename
 
-def add_data_to_snapshot(snapshot_name, device):
+def add_data_to_snapshot(snapshot_name:str, device:dict):
     print (f"Редактирование {snapshot_name}")
     with open(snapshot_name, "a+") as f:
         text = f.read()
@@ -39,7 +39,7 @@ def add_data_to_snapshot(snapshot_name, device):
             )
             f.write(to_write)
 
-def select_device(snapshot_name):
+def select_device(snapshot_name:str) -> str:
     with open(snapshot_name, "r") as f:
         ids = f['device_id'].tolist()
         c = 1
@@ -49,7 +49,7 @@ def select_device(snapshot_name):
     answer = input("Выберите номер устройства")
     return answer
     
-def select_params(snapshot_name):
+def select_params(snapshot_name:str) -> str:
     with open(snapshot_name, "r") as f:
         c = 1
         params = []
