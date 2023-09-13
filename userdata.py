@@ -1,8 +1,7 @@
 from cryptography.fernet import Fernet
-
+from os.path import isfile
 
 def get_key():
-    from os.path import isfile
     from generate_key import regenerate_key
     if not isfile('.secret_key'):
         regenerate_key()
@@ -20,6 +19,9 @@ def read_user_data():
     data_by_ip, data_by_flag = {}, {}
     header = True
     fn = Fernet(get_key())
+    if not isfile(USERS_FILE):
+        with open(USERS_FILE, mode='w') as uf:
+            uf.write('ip;login;password;flag\n')
     with open(USERS_FILE, mode='r') as uf:
         for line in uf.readlines():
             if header: 
