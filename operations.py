@@ -84,7 +84,7 @@ def get_neig_data(pxp: expect_lib.spawn) -> str:
     print("Получение данныx с устройства...")
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
-    pxp.expect("--.+$.+$", re.DOTALL)
+    pxp.expect("--.+$", re.DOTALL)
     data = pxp.after
     # pxp.expect([".*>", ".*#"])
     print("Данные полученны")
@@ -130,7 +130,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
             if send_connections:
                 name_in = f'{device["ip"]} - {device["device_id"]}'
                 name_out = f'{neigh["ip"]} - {neigh["device_id"]}'
-                yield ((name_in, neigh["port_id"]), (name_out, neigh["interface_id"]))
+                yield ((name_in, neigh["port_id"]), (name_out, neigh["interface"]))
         print(visited)
         
         if not send_connections:
