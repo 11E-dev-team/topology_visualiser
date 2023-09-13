@@ -28,9 +28,11 @@ if __name__ == "__main__":
                     pxp=main_pxp, entry_ip=input("ip: "), username=input('login: '), 
                     password=getpass('password: '), send_connections=True
                 )}
+                print(connections)
                 for key, value in list(connections.items()):
                     if value in connections:
                         del connections[key]
+                print(connections)
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
                 gtv = GraphvizTopologyVisualizer(connections)
                 gtv.draw(input('Имя файла изображения: '))

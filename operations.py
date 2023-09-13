@@ -77,8 +77,9 @@ def enter_privileged_mode(pxp: expect_lib.spawn):
 
 def get_neig_data(pxp: expect_lib.spawn):
     print("Получение данныx с устройства...")
+    pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
-    pxp.expect("Total cdp entries displayed : ")
+    pxp.expect(["Total cdp entries displayed : ", "#"])
     data = pxp.before
     # pxp.expect([".*>", ".*#"])
     print("Данные полученны")
@@ -115,11 +116,13 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
         #enter_privileged_mode(pxp)
         print('Подключено. Получение данных о соседях')
         neighs = parse_neighbors(get_neig_data(pxp))
+        print('Обнаружено', len(neighs), 'соседей')
         for neigh in neighs:
             if neigh['ip'] not in visited:
                 stack.append(neigh)
             if send_connections:
                 yield ((device["device_id"], neigh["port_id"]), (neigh["device_id"], neigh["interface_id"]))
+        print(visited)
         visited.append(neigh['ip'])
         if not send_connections:
             yield device
