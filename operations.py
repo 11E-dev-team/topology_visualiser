@@ -2,13 +2,18 @@ from config import expect_lib
 
 # from pexpect import popen_spawn
 import re
+import time
 
 
 def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None) -> expect_lib.spawn:
     if pxp is None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
+        pxp.expect("$")
+        print("На бызовом устройстве")
+        print("Подключение дальше по ssh")
         pxp.sendline(f"ssh {login}@{ip}")
+    time.sleep(5)
     result = pxp.expect(["password:", "(yes/no)"])
     if result == 1:
         pxp.sendline("yes")
