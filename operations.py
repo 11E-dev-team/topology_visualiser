@@ -80,7 +80,7 @@ def get_neig_data(pxp: expect_lib.spawn) -> str:
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
     pxp.expect("--.+$.+$", re.DOTALL)
-    data = pxp.before
+    data = pxp.after
     # pxp.expect([".*>", ".*#"])
     print("Данные полученны")
     return data
