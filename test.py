@@ -124,6 +124,13 @@ def test4 ():
     device_id = fu.select_device(snapshot_name)
     params = fu.select_params(snapshot_name)
     fu.get_data(snapshot_name, device_id, params)
-test4()
+# test4()
 
 # fu.create_snapshot()1
+
+from pandas import *
+def test5 (snapshot_id="2023-09-14 11-20-08.007039"):
+    file = read_csv(fu.net_snapshot_path(snapshot_id), sep=";")
+    file = file.sort_values(by=["Device ID", "IP address"])
+    file.to_csv(fu.net_snapshot_path(snapshot_id), sep=";", index=0)
+test5()

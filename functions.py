@@ -81,7 +81,9 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         ) + "\n"
     with open(connections_snapshot_path(snapshot_id), "a+") as f:
         f.write(to_write[:-1])
-
+    file = read_csv(net_snapshot_path(snapshot_id), sep=";")
+    file = file.sort_values(by=["Device ID", "IP address"])
+    file.to_csv(net_snapshot_path(snapshot_id), sep=";", index=0)
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
     print (f"Редактирование обараза {snapshot_id} (устройства)")
