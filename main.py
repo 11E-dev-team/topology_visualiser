@@ -79,9 +79,6 @@ if __name__ == "__main__":
                     #     password=entry_password, send_connections=True
                     # )}
                 #print(connections)
-                for key, value in list(connections.items()):
-                    if value in connections:
-                        del connections[key]
                 #print(connections)
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
                 graphname = lambda ip, id, port: (f"{id} - {ip}", port)

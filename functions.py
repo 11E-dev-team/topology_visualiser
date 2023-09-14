@@ -98,11 +98,16 @@ def net_snapshot_path(snapshot_id: str):
 def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tuple]):
     print (f"Редактирование образа {snapshot_id}")
     to_write = ""
+    seen = set()
     for device_a, device_b in connections:
+        if (device_a, device_b) in seen or (device_b, device_a) in seen:
+            continue
+        seen.add((device_a, device_b))
         to_write += ';'.join(
             (';'.join(device_a),
             ';'.join(device_b))
         )
+    
     with open(connections_snapshot_path(snapshot_id), "a+") as f:
         f.write(to_write)
 
