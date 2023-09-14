@@ -33,7 +33,7 @@ def select_snapshot(snapshots=None) -> str:
     if snapshots == None:
         snapshots = os.listdir('snapshots')
         all_snapshots = [
-            s[len("net_snapshot"):-len(".csv")]
+            s[len("net_snapshot")-1:-len(".csv")]
             for s in snapshots
             if s.startswith('net_')
         ]
@@ -41,10 +41,10 @@ def select_snapshot(snapshots=None) -> str:
         all_snapshots = snapshots
     c = 1
     for snapshot in reversed(all_snapshots):
-        print (f"{c} - {snapshot[len('net_snapshot')-1:-len('.csv')]}")
+        print (f"{c} - {snapshot}")
         c += 1
     answer = int(input(("Выберите снапшот: ")))
-    return snapshots[answer-1][len("net_snapshot")-1:-len(".csv")]
+    return snapshots[answer-1]
 
 
 def create_snapshot() -> str:
@@ -126,7 +126,7 @@ def select_params(snapshot_id: str) -> str:
 
 def get_data (snapshot_id, device_ip, param) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['IP address'])
-    print (f"{param}: \n {file[param][device_ip]}")
+    return f"{param}:\n{file[param][device_ip]}"
 
 def read_connections_snapshot(snapshot_id):
     with open(connections_snapshot_path(snapshot_id)) as f:
