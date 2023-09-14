@@ -59,7 +59,10 @@ class GraphvizTopologyVisualizer(TopologyVisualizer):
                 + list(self.topology.values())
             ]
         )
-        fileformat = filename.split('.')[-1]
+        if '.' in filename:
+            fileformat = filename.split('.')[-1]
+        else:
+            fileformat = 'png'
         graphs = (gv.Graph(format=fileformat),)
         filename = os.path.join('images',  filename)
         for graph in graphs:
