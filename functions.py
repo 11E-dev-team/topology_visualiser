@@ -4,16 +4,19 @@ from pandas import *
 import os
 from typing import Iterable
 
+
 def delete_snapshot(snapshot_id) -> str:
     if os.path.isfile(net_snapshot_path(snapshot_id)):
         os.remove(net_snapshot_path(snapshot_id))
     if os.path.isfile(connections_snapshot_path(snapshot_id)):
         os.remove(connections_snapshot_path(snapshot_id))
 
+
 def most_recent_snapshot() -> str:
     with open('snapshots/most_recent') as m:
         mrs = m.read()
     return mrs
+
 
 def get_snapshots() -> str:
     snapshots = os.listdir('snapshots')
@@ -24,6 +27,7 @@ def get_snapshots() -> str:
         if s.startswith('net_')
     ]
     return all_snapshots
+
 
 def select_snapshot(snapshots=None) -> str:
     if snapshots == None:
@@ -42,6 +46,7 @@ def select_snapshot(snapshots=None) -> str:
     answer = int(input(("Выберите снапшот: ")))
     return snapshots[answer-1][len("net_snapshot"):-len(".csv")]
 
+
 def create_snapshot() -> str:
     print ("Создание образа сети")
     if not os.path.isdir("snapshots"):
@@ -56,11 +61,14 @@ def create_snapshot() -> str:
         f.write(snapshot_id)
     return snapshot_id
 
+
 def connections_snapshot_path(snapshot_id: str):
     return f"snapshots/connections_snapshot{snapshot_id}.csv"
 
+
 def net_snapshot_path(snapshot_id: str):
     return f"snapshots/net_snapshot{snapshot_id}.csv"
+
 
 def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tuple]):
     print (f"Редактирование образа {snapshot_id}")
@@ -73,6 +81,7 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         ) + "\n"
     with open(connections_snapshot_path(snapshot_id), "a+") as f:
         f.write(to_write[:-1])
+
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
     print (f"Редактирование обараза {snapshot_id} (устройства)")
@@ -90,6 +99,7 @@ def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
     with open(net_snapshot_path(snapshot_id), "a+") as f:
         f.write(to_write[:-1])
 
+
 def select_device(snapshot_id: str) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";")
     ids = file["Device ID"].tolist()
@@ -100,7 +110,8 @@ def select_device(snapshot_id: str) -> str:
         c+=1
     answer = int(input("Выберите номер устройства: "))
     return ips[answer-1]
-    
+
+
 def select_params(snapshot_id: str) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['IP address'])
     columns = file.columns.tolist()
@@ -112,12 +123,15 @@ def select_params(snapshot_id: str) -> str:
     answer = int(input("Выберите параметр: "))
     return columns[answer-1]
 
+
 def get_data (snapshot_id, device_ip, param) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['IP address'])
     print (f"{param}: \n {file[param][device_ip]}")
 
 def read_connections_snapshot(snapshot_id):
     with open(connections_snapshot_path(snapshot_id)) as f:
+        res = []
         for line in f.readlines()[1:]:
             args = line.split(';')
-            yield (tuple(args[:3]), tuple(args[3:]))
+            res.append((tuple(args[:3]), tuple(args[3:])))
+        return res

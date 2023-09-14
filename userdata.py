@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 from os.path import isfile
 
+
 def get_key():
     from generate_key import regenerate_key
     if not isfile('.secret_key'):
@@ -10,10 +11,12 @@ def get_key():
 
 USERS_FILE = 'users.csv'
 
+
 def add_user_data(ip: str, login: str, password: str, flag: str = '-'):
     with open(USERS_FILE, mode='a') as uf:
         data = f'{ip};{login};{password};{flag}'
         uf.write(Fernet(get_key()).encrypt(data.encode()).decode()+'\n')
+
 
 def read_user_data():
     data_by_ip, data_by_flag = {}, {}
@@ -33,6 +36,7 @@ def read_user_data():
             data_by_ip[ip] = data_by_flag[flag] = [ip, login, password, flag]
     print(data_by_flag)
     return data_by_ip, data_by_flag
+
 
 def dump_user_data(data):
     with open(USERS_FILE, mode='w') as uf:
