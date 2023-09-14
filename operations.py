@@ -5,7 +5,7 @@ import re
 import time
 
 
-def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None) -> expect_lib.spawn:
+def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconections: int = 5) -> expect_lib.spawn:
     if pxp is None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
@@ -15,8 +15,12 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
         pxp.sendline(f"ssh {login}@{ip}")
     time.sleep(5)
     result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
-    while result == -1:
+    reconections = 1
+    while (result == -1) or (reconections > max_reconections):
+        print(f"Попытка подключения {reconections}/{max_reconections}")
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
+    if reconections > max_reconections:
+        print("Попытка подключения не удалась")
     if result == 1:
         pxp.sendline("yes")
     pxp.sendline(f"{password}")

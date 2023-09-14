@@ -80,16 +80,18 @@ def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
 def select_device(snapshot_id: str) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";")
     ids = file["Device ID"].tolist()
+    ips = file["IP address"].tolist()
     c = 1
-    for device in ids:
-        print (f"{c} - {device}")
+    for i in range(len(ids)):
+        print (f"{c} - {ids[i]} : {ips[i]}")
         c+=1
     answer = int(input("Выберите номер устройства: "))
-    return ids[answer-1]
+    return ips[answer-1]
     
 def select_params(snapshot_id: str) -> str:
-    file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['Device ID'])
+    file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['IP address'])
     columns = file.columns.tolist()
+    columns.remove("Device ID")
     c = 1
     for param in columns:
         print (f"{c} - {param}")
@@ -97,9 +99,9 @@ def select_params(snapshot_id: str) -> str:
     answer = int(input("Выберите параметр: "))
     return columns[answer-1]
 
-def get_data (snapshot_id, device_id, param) -> str:
-    file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['Device ID'])
-    print (f"{param}: \n {file[param][device_id]}")
+def get_data (snapshot_id, device_ip, param) -> str:
+    file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['IP address'])
+    print (f"{param}: \n {file[param][device_ip]}")
 
 def read_connections_snapshot(snapshot_id):
     with open(connections_snapshot_path(snapshot_id)) as f:
