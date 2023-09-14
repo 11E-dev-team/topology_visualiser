@@ -7,3 +7,27 @@
 # Что может проект?
 - Построить топологию сети - возвращает изображение, на котором наглядно видно как выглядит топология сети и как соединены устройства в ней
 - Раюотать с сохраненными данными и обновлять их
+
+# Как запустить проект?
+## Установка на Windows
+- Установите Python 3.11.x
+    - Скачайте [инсталятор](https://www.python.org/downloads/)
+    - Запустите процесс установки
+    - __Убедитесь, что python прописан в PATH__
+        - В командной строке при вызове `echo %PATH%` в выводе должно быть `..\Python311`, `..\Python311\Scripts`
+        - Если их нет, то внесите Python в PATH
+            - Откройте `Win+R` `sysdm.cp`
+            - Выбрать раздел "Дополнительно"
+            - Перейти в `Переменные среды`
+            - Два раза кликнуть по `Path`
+            - Выбрать `Создать`
+            - Ввести путь к Python (по умолчанию `C:\Users\<uesrname>\AppData\Local\Python311`)
+            - И к папке Scripts (по умолчанию `C:\Users\<uesrname>\AppData\Local\Python311\Scripts`)
+            - Перезапустить консоль
+- Установите нужные библиотеки
+    - `pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org wexpect pandas cryptography graphviz`
+- Установите Graphviz
+    - Скачайте и запустите [инсталятор](https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/windows_10_cmake_Release_graphviz-install-9.0.0-win64.exe)
+    - Не забудьте выбрать опции для внесения в PATH
+- Запустите проект
+    - Просто выберите файл main.py    
