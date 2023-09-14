@@ -97,7 +97,7 @@ def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 5) -> str:
         result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     if reconections > max_reconnections:
         print("Попытка подключения не удалась")
-    if result == 1:
+    if result == 0:
         data = pxp.after
         # pxp.expect([".*>", ".*#"])
         print("Данные полученны")
