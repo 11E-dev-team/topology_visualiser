@@ -61,7 +61,8 @@ if __name__ == "__main__":
                 snapshot_name = fu.select_snapshot()
                 print ("Запрос параметров устройтсва")
                 device_id = fu.select_device(snapshot_name)
-                params = fu.select_params(snapshot_name)
+                param = fu.select_params(snapshot_name)
+                print (fu.get_data(snapshot_name, device_id, param))
             case "4":
                 snapshot_name = fu.select_snapshot()
                 print ("Выполнить команды в конфигурационном режиме")

@@ -90,5 +90,14 @@ d = {("R4", "Eth0/1"): ("R5", "Eth0/1"),
 def test3 (d):
     GraphvizTopologyVisualizer(d).draw('test.svg')
     
-test3(d)
+# test3(d)
+import functions as fu
 
+def test4 ():
+    snapshot_name = fu.select_snapshot()
+    device_id = fu.select_device(snapshot_name)
+    params = fu.select_params(snapshot_name)
+    fu.get_data(snapshot_name, device_id, params)
+test4()
+
+# fu.create_snapshot()
