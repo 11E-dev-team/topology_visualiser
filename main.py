@@ -89,9 +89,9 @@ if __name__ == "__main__":
             case "3":
                 snapshot_id = snapshot_dialog()
                 print ("Запрос параметров устройтсва")
-                device_id = fu.select_device(snapshot_id)
+                device_ip = fu.select_device(snapshot_id)
                 param = fu.select_params(snapshot_id)
-                print (fu.get_data(snapshot_id, device_id, param))
+                print (fu.get_data(snapshot_id, device_ip, param))
             case "4":
                 snapshot_id = snapshot_dialog()
                 print ("Выполнить команды в конфигурационном режиме")
