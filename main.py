@@ -9,6 +9,9 @@ import operations as op
 from getpass import getpass
 
 def snapshot_dialog():
+    snapshots = fu.get_snapshots()
+    if not snapshots:
+        return create_new_snapshot()
     while True:
         option = input(dialog.select_snapshot)
         match option:
@@ -17,7 +20,7 @@ def snapshot_dialog():
             case "2":
                 return fu.most_recent_snapshot()
             case "3":
-                return fu.select_snapshot()
+                return fu.select_snapshot(snapshots)
 
                 
 
@@ -81,7 +84,7 @@ if __name__ == "__main__":
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
                 graphname = lambda ip, id, port: (f"{id} - {ip}", port)
                 gtv = GraphvizTopologyVisualizer({
-                    graphname(key): graphname(value) 
+                    graphname(*key): graphname(*value) 
                     for key, value in connections.items()
                 })
                 gtv.draw(input('Имя файла изображения: '))

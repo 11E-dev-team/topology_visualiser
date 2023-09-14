@@ -15,7 +15,7 @@ def most_recent_snapshot() -> str:
         mrs = m.read()
     return mrs
 
-def select_snapshot() -> str:
+def get_snapshots() -> str:
     snapshots = os.listdir('snapshots')
     c = 1
     all_snapshots = [
@@ -23,6 +23,19 @@ def select_snapshot() -> str:
         for s in snapshots
         if s.startswith('net_')
     ]
+    return all_snapshots
+
+def select_snapshot(snapshots=None) -> str:
+    if snapshots == None:
+        snapshots = os.listdir('snapshots')
+        c = 1
+        all_snapshots = [
+            s[len("net_snapshot"):-len(".csv")]
+            for s in snapshots
+            if s.startswith('net_')
+        ]
+    else:
+        all_snapshots = snapshots
     for snapshot in reversed(all_snapshots):
         print (f"{c} - {snapshot[len('net_snapshot'):-len('.csv')]}")
         c += 1
@@ -106,5 +119,5 @@ def get_data (snapshot_id, device_ip, param) -> str:
 def read_connections_snapshot(snapshot_id):
     with open(connections_snapshot_path(snapshot_id)) as f:
         for line in f.readlines()[1:]:
-            args = line.strip(';')
-            yield (tuple(args[:2]), tuple(args[2:]))
+            args = line.split(';')
+            yield (tuple(args[:3]), tuple(args[3:]))
