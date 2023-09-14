@@ -117,7 +117,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
     pxp.sendline('exit')
     while stack:
         device = stack.pop(0)
-        if device["id"] in visited:
+        if device["ip"] in visited:
             continue
         print(f'Подключение к {username}@{device["ip"]}')
         start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp)
