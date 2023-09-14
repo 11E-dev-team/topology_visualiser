@@ -107,7 +107,8 @@ def parse_neighbors(output: str) -> dict:
             matches.append(match.groupdict())
     return matches
 
-def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False):
+def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
+             connections_buffer: list=None, devices_buffer: list=None):
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp)
     #enter_privileged_mode(pxp)
     stack = parse_neighbors(get_neig_data(pxp)) 
@@ -130,9 +131,16 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
             elif send_connections:
                 name_in = f'{device["ip"]} - {device["device_id"]}'
                 name_out = f'{neigh["ip"]} - {neigh["device_id"]}'
+                if connections_buffer is not None:
+                    connections_buffer.append(
+                        ((device["ip"], device["device_id"], neigh["port_id"]), 
+                         (neigh["ip"], neigh["device_id"], neigh["interface"]))
+                    )
                 yield ((name_in, neigh["port_id"]), (name_out, neigh["interface"]))
         visited.append(device['ip'])
         if not send_connections:
             yield device
+        if devices_buffer is not None:
+            devices_buffer.append(device)
         print('Возврат к внешней машине')
         pxp.sendline('exit')

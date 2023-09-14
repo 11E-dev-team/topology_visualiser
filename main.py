@@ -15,16 +15,23 @@ if __name__ == "__main__":
             case "1":
                 print ("Инициализировать сеть")
                 snapshot_name = fu.create_snapshot()
+                snapshot_connections_name = fu.create_connections_snapshot()
 
                 userdata = dialog.net_access_user_data()
                 outer_ip, outer_login, outer_password = userdata['outer']
                 entry_ip, entry_login, entry_password = userdata['entry']
                 
                 main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
-                fu.add_data_to_snapshot(snapshot_name, 
-                                        op.roam_net(pxp=main_pxp, entry_ip=entry_ip, 
-                                                    username=entry_login, password=entry_password, 
-                                                    send_connections=False))
+
+                connections_buffer = []
+                data_iterator = op.roam_net(pxp=main_pxp, entry_ip=entry_ip, 
+                                            username=entry_login, password=entry_password, 
+                                            send_connections=False,
+                                            connections_buffer=connections_buffer)
+
+                fu.add_data_to_snapshot(snapshot_name, data_iterator)
+                fu.add_connections_data_to_snapshot(snapshot_connections_name, connections_buffer)
+
             case "2":
                 print ("Построить топологию сети")
                 userdata = dialog.net_access_user_data()
@@ -33,7 +40,11 @@ if __name__ == "__main__":
 
                 main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
                 print('Подключение к первой машине в сети')
-                connections = {key: value for key, value in op.roam_net(
+
+                graphname = lambda ip, id, port: (f"{id} - {ip}", port)
+
+                connections = {graphname(key): graphname(value)
+                                for key, value in op.roam_net(
                     pxp=main_pxp, entry_ip=entry_ip, username=entry_login, 
                     password=entry_password, send_connections=True
                 )}

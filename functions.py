@@ -8,6 +8,20 @@ def select_snapshot():
     snapshots = os.listdir('snapshots')
     snapshots.remove('most_recent')
 
+def create_connections_snapshot() -> str:
+    print ("Создание снапшота связей")
+    if not os.path.isdir("snapshots"):
+        os.mkdir("snapshots")
+    filename = f"snapshots/connections_snapshot{str(datetime.datetime.now()).replace(':', '-')}.csv"
+    with open(filename, "w") as f:
+        f.write(dialog.connections_columns)
+
+    with open('snapshots/most_recent_connections', "w") as f:
+        f.write(filename)
+
+    return filename
+
+
 def create_snapshot() -> str:
     print ("Создание снапшота")
     if not os.path.isdir("snapshots"):
@@ -20,6 +34,18 @@ def create_snapshot() -> str:
         f.write(filename)
 
     return filename
+
+def add_connections_data_to_snapshot(snapshot_name: str, connections: Iterable[tuple]):
+    print (f"Редактирование {snapshot_name}")
+    with open(snapshot_name, "a+") as f:
+        text = f.read()
+    for device_a, device_b in connections:
+        to_write = ';'.join(
+            (';'.join(device_a),
+            ';'.join(device_b))
+        )
+        with open(snapshot_name, "a+") as f:
+            f.write(to_write)
 
 def add_data_to_snapshot(snapshot_name: str, devices: Iterable[dict]):
     print (f"Редактирование {snapshot_name}")

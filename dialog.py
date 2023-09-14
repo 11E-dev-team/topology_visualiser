@@ -18,6 +18,7 @@ init = """
 3 - Выбрать снапшот\n
 """
 csv_columns = "Device ID;IP address;Software;Version\n"
+connections_columns = "Device A ID;Device A IP address;Device A Port;Device B ID; Device B IP address;Device B Port\n"
 
 
 def net_access_user_data():
