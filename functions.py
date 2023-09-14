@@ -22,6 +22,8 @@ def most_recent_snapshot() -> str:
 
 
 def get_snapshots() -> str:
+    if not os.path.isdir('snapshots'):
+        os.mkdir('snapshots')
     snapshots = os.listdir('snapshots')
     c = 1
     all_snapshots = [
@@ -34,6 +36,8 @@ def get_snapshots() -> str:
 
 def select_snapshot(snapshots=None) -> str:
     if snapshots == None:
+        if not os.path.isdir('snapshots'):
+            os.mkdir('snapshots')
         snapshots = os.listdir('snapshots')
         all_snapshots = [
             s[len("net_snapshot")-1:-len(".csv")]
