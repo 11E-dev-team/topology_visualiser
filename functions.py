@@ -47,7 +47,6 @@ def select_snapshot(snapshots=None) -> str:
     while True:
         c = 1
         if len(all_snapshots) >= SNAPSHOTS_PER_PAGE:
-            print(page, SNAPSHOTS_PER_PAGE)
             displayed_snapshots = all_snapshots[page*SNAPSHOTS_PER_PAGE:page*SNAPSHOTS_PER_PAGE+SNAPSHOTS_PER_PAGE]
             print(f'Выберите образ (Страница {page + 1}/{max_page})')
         for snapshot in reversed(displayed_snapshots):
@@ -95,7 +94,6 @@ def net_snapshot_path(snapshot_id: str):
 def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tuple]):
     print (f"Редактирование образа {snapshot_id}")
     to_write = ""
-    print("Запись:\n", connections)
     for device_a, device_b in connections:
         to_write += ';'.join(
             (';'.join(device_a),

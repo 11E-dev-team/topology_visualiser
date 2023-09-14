@@ -27,7 +27,6 @@ def snapshot_dialog():
                 
 
 def create_new_snapshot():
-    print('Создание образа сети...')
     snapshot_id = fu.create_snapshot()
 
     try:

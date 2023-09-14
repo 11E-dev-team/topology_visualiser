@@ -84,7 +84,7 @@ def enter_privileged_mode(pxp: expect_lib.spawn):
             pxp.sendline("cisco")
             pxp.expect(".*#")
 
-    print("Accesed")
+    print("Допущен")
 
 
 def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 10) -> str:
