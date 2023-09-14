@@ -2,6 +2,7 @@ from config import expect_lib
 
 # from pexpect import popen_spawn
 import re
+import time
 
 
 def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 10) -> expect_lib.spawn:
@@ -16,7 +17,9 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
     reconections = 2
     while (result == 1) or (reconections > max_reconnections):
         print(f"Попытка подключения {reconections}/{max_reconnections}")
+        time.sleep(reconections)
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
+        reconections += 1
     if reconections > max_reconnections:
         print("Попытка подключения не удалась")
     if result == 1:
@@ -92,7 +95,9 @@ def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 10) -> str:
     reconections = 2
     while (result == 1) or (reconections > max_reconnections):
         print(f"Попытка подключения {reconections}/{max_reconnections}")
+        time.sleep(reconections)
         result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
+        reconections += 1
     if reconections > max_reconnections:
         print("Попытка подключения не удалась")
     if result == 0:
