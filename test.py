@@ -113,7 +113,7 @@ d = {("10.13.8.187 - sw138", "GigabitEthernet0/1") : ("10.13.8.185 - sw138", "Gi
 def test3 (d):
     GraphvizTopologyVisualizer(d).draw('test1.svg')
     
-test3(c)
+test3(d)
 # import functions as fu
 
 # def test4 ():
