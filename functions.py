@@ -108,7 +108,7 @@ def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
         text = f.read()
     to_write  = ""
     for device in devices:
-        if device["device_id"] not in text:
+        if device["ip"] not in text:
             to_write += (device["device_id"]
                         + ";" + device["ip"]
                         + ";" + device["software"]
