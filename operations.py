@@ -90,7 +90,7 @@ def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 5) -> str:
     print("Получение данныx с устройства...")
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
-    pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
+    result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     reconections = 1
     while (result == -1) or (reconections > max_reconnections):
         print(f"Ожидание ответа")
