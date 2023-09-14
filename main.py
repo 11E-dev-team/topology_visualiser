@@ -22,6 +22,8 @@ def snapshot_dialog():
                 return fu.most_recent_snapshot()
             case "3":
                 return fu.select_snapshot(snapshots)
+            case _:
+                return fu.most_recent_snapshot()
                 
 
 def create_new_snapshot():

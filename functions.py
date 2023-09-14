@@ -3,6 +3,9 @@ import datetime
 from pandas import *
 import os
 from typing import Iterable
+from math import ceil
+
+SNAPSHOTS_PER_PAGE = 5
 
 
 def delete_snapshot(snapshot_id) -> str:
@@ -39,12 +42,31 @@ def select_snapshot(snapshots=None) -> str:
         ]
     else:
         all_snapshots = snapshots
-    c = 1
-    for snapshot in reversed(all_snapshots):
-        print (f"{c} - {snapshot}")
-        c += 1
-    answer = int(input(("Выберите снапшот: ")))
-    return snapshots[answer-1]
+    page = 0
+    max_page = ceil(len(all_snapshots)/SNAPSHOTS_PER_PAGE)
+    while True:
+        c = 1
+        if len(all_snapshots) >= SNAPSHOTS_PER_PAGE:
+            print(page, SNAPSHOTS_PER_PAGE)
+            displayed_snapshots = all_snapshots[page*SNAPSHOTS_PER_PAGE:page*SNAPSHOTS_PER_PAGE+SNAPSHOTS_PER_PAGE]
+            print(f'Выберите образ (Страница {page + 1}/{max_page})')
+        for snapshot in reversed(displayed_snapshots):
+            print (f"{c} - {snapshot}")
+            c += 1
+        
+        print('Введите 0 для переключения на страницу назад')
+        print('Введите 6 для переключения на страницу вперёд')
+        answer = input()
+        if answer == '6':
+            page = min(page + 1, max_page-1)
+            continue
+        if answer == '0':
+            page = max(page - 1, 0)
+            continue
+        try:
+            return displayed_snapshots[int(answer)-1]
+        except:
+            continue
 
 
 def create_snapshot() -> str:
