@@ -79,7 +79,11 @@ if __name__ == "__main__":
                         del connections[key]
                 #print(connections)
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
-                gtv = GraphvizTopologyVisualizer(connections)
+                graphname = lambda ip, id, port: (f"{id} - {ip}", port)
+                gtv = GraphvizTopologyVisualizer({
+                    graphname(key): graphname(value) 
+                    for key, value in connections.items()
+                })
                 gtv.draw(input('Имя файла изображения: '))
                 print('Схема топологии сохранена')
             case "3":
