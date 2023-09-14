@@ -41,10 +41,10 @@ def select_snapshot(snapshots=None) -> str:
         all_snapshots = snapshots
     c = 1
     for snapshot in reversed(all_snapshots):
-        print (f"{c} - {snapshot[len('net_snapshot'):-len('.csv')]}")
+        print (f"{c} - {snapshot[len('net_snapshot')-1:-len('.csv')]}")
         c += 1
     answer = int(input(("Выберите снапшот: ")))
-    return snapshots[answer-1][len("net_snapshot"):-len(".csv")]
+    return snapshots[answer-1][len("net_snapshot")-1:-len(".csv")]
 
 
 def create_snapshot() -> str:
