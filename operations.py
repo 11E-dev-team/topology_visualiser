@@ -2,6 +2,7 @@ from config import expect_lib
 
 import re
 import time
+import settings
 
 
 def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 10) -> expect_lib.spawn:
@@ -81,7 +82,8 @@ def parse_neighbors(output: str) -> dict:
 
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
              connections_buffer: list=None, devices_buffer: list=None):
-    start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp)
+    start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp, 
+              max_reconnections=int(settings.get_setting('recconect')))
     stack = parse_neighbors(get_neig_data(pxp))
     visited = [entry_ip]
     print('Анализ сети')
@@ -95,7 +97,8 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
                     yield device
             continue
         print(f'Подключение к {username}@{device["ip"]}')
-        start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp)
+        start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp,
+                  max_reconnections=int(settings.get_setting('recconect')))
         print('Подключено. Получение данных о соседях')
         neighs = parse_neighbors(get_neig_data(pxp))
         print('Обнаружено', len(neighs), 'соседей')

@@ -6,6 +6,7 @@ import os
 import functions as fu
 import operations as op
 from getpass import getpass
+import settings
 
 
 def snapshot_dialog():
@@ -78,6 +79,34 @@ if __name__ == "__main__":
                 device_ip = fu.select_device(snapshot_id)
                 param = fu.select_params(snapshot_id)
                 print (fu.get_data(snapshot_id, device_ip, param))
+            case "4":
+                stgdict = settings.read_settings()
+                keys = stgdict.keys()
+                while True:
+                    print('Выберите параметр: ')
+                    for key in keys:
+                        print(key, f"[{stgdict[key]}]")
+                    opt = input()
+                    if opt in keys:
+                        break
+                while True:
+                    if opt == 'verbose':
+                        print('Выберите значение:')
+                        print('0 - только необходимый вывод в консоль')
+                        print('1 - подробный вывод в консоль')
+                        print('2 - очень подробный вывод в консоль')
+                        val = input()
+                        if val == '0' or val == '1' or val == '2':
+                            break
+                    else:
+                        print('Впишите значение параметра:')
+                        val = input()
+                        if val.isdigit():
+                            break
+                settings.set_setting(key, val)
+                print(f'Настройке {key} установлено значение {val}')
+
+
             case "0":
                 print("Выход из программы")
                 break

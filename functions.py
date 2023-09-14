@@ -5,7 +5,7 @@ import os
 from typing import Iterable
 from math import ceil
 
-SNAPSHOTS_PER_PAGE = 5
+import settings
 
 
 def delete_snapshot(snapshot_id) -> str:
@@ -35,6 +35,8 @@ def get_snapshots() -> str:
 
 
 def select_snapshot(snapshots=None) -> str:
+    SNAPSHOTS_PER_PAGE = int(settings.get_setting('snapshots per page'))
+
     if snapshots == None:
         if not os.path.isdir('snapshots'):
             os.mkdir('snapshots')
@@ -58,9 +60,9 @@ def select_snapshot(snapshots=None) -> str:
             c += 1
         
         print('Введите 0 для переключения на страницу назад')
-        print('Введите 6 для переключения на страницу вперёд')
+        print(f'Введите {SNAPSHOTS_PER_PAGE + 1} для переключения на страницу вперёд')
         answer = input()
-        if answer == '6':
+        if answer == str(SNAPSHOTS_PER_PAGE + 1):
             page = min(page + 1, max_page-1)
             continue
         if answer == '0':
