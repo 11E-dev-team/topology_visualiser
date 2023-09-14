@@ -148,7 +148,6 @@ def select_params(snapshot_id: str) -> str:
     answer = int(input("Выберите параметр: "))
     return columns[answer-1]
 
-
 def get_data (snapshot_id, device_ip, param) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['IP address'])
     return f"{param}:\n{file[param][device_ip]}"
