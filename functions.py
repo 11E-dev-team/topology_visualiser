@@ -106,10 +106,9 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         to_write += ';'.join(
             (';'.join(device_a),
             ';'.join(device_b))
-        )
-    
+        ) + "\n"
     with open(connections_snapshot_path(snapshot_id), "a+") as f:
-        f.write(to_write)
+        f.write(to_write[:-1])
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
     print (f"Редактирование обараза {snapshot_id} (устройства)")
