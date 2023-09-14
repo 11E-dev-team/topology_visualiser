@@ -92,7 +92,7 @@ def select_params(snapshot_id: str) -> str:
 
 def get_data (snapshot_id, device_id, param) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";", index_col=['Device ID'])
-    print (file[param][device_id])
+    print (f"{param}: \n {file[param][device_id]}")
 
 def read_connections_snapshot(snapshot_id):
     with open(connections_snapshot_path(snapshot_id)) as f:
