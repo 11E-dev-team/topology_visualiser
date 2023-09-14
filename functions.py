@@ -62,7 +62,7 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         f.write(to_write[:-1])
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
-    print (f"Редактирование обараза {snapshot_id}")
+    print (f"Редактирование обараза {snapshot_id} (устройства)")
     with open(net_snapshot_path(snapshot_id), "a+") as f:
         text = f.read()
     to_write  = ""
