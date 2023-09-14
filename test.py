@@ -110,11 +110,14 @@ d = {("10.13.8.187 - sw138", "GigabitEthernet0/1") : ("10.13.8.185 - sw138", "Gi
      ("10.13.8.187 - sw138", "GigabitEthernet0/2") : ("10.13.8.1 - sw138", "GigabitEthernet0/4"),
      ("10.13.8.186 - sw138", "GigabitEthernet0/9") : ("10.13.8.1 - sw138", "GigabitEthernet0/2"),
      ("10.13.8.1 - sw138", "GigabitEthernet0/2") : ("10.13.8.2 - gw138", "GigabitEthernet0/1")}
+
+
 def test3 (d):
     GraphvizTopologyVisualizer(d).draw('test1.svg')
     
 # test3(d)
 import functions as fu
+
 
 def test4 ():
     snapshot_name = fu.select_snapshot()
