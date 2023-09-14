@@ -103,8 +103,8 @@ if __name__ == "__main__":
                         val = input()
                         if val.isdigit():
                             break
-                settings.set_setting(key, val)
-                print(f'Настройке {key} установлено значение {val}')
+                settings.set_setting(opt, val)
+                print(f'Настройке {opt} установлено значение {val}')
 
 
             case "0":

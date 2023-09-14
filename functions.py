@@ -55,6 +55,8 @@ def select_snapshot(snapshots=None) -> str:
         if len(all_snapshots) >= SNAPSHOTS_PER_PAGE:
             displayed_snapshots = all_snapshots[page*SNAPSHOTS_PER_PAGE:page*SNAPSHOTS_PER_PAGE+SNAPSHOTS_PER_PAGE]
             print(f'Выберите образ (Страница {page + 1}/{max_page})')
+        else:
+            displayed_snapshots = all_snapshots
         for snapshot in reversed(displayed_snapshots):
             print (f"{c} - {snapshot}")
             c += 1
