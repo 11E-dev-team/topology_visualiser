@@ -113,7 +113,7 @@ def parse_neighbors(output: str) -> dict:
         match = re.search(
             r"Device ID ?: ?(?P<device_id>\w+)"
             r".+IP address ?: ?(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
-            r".+Interface ?: ?(?P<interface>\S+)"
+            r".+Interface ?: ?(?P<interface>\S+),"
             r".+Port ID \(outgoing port\) ?: ?(?P<port_id>\S+)"
             r".+Software \((?P<software>\S+)\)"
             r".+Version (?P<version>.+?)(,\s|$)$",
