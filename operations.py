@@ -111,7 +111,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp)
     #enter_privileged_mode(pxp)
     stack = parse_neighbors(get_neig_data(pxp)) 
-    visited = []
+    visited = [entry_ip]
     print('Анализ сети')
     pxp.sendline('exit')
     while stack:
