@@ -98,6 +98,8 @@ def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
             )
     with open(net_snapshot_path(snapshot_id), "a+") as f:
         f.write(to_write[:-1])
+    file = read_csv(net_snapshot_path(snapshot_id))
+    file.sort_values(by=["Device ID", "IP address"])
 
 
 def select_device(snapshot_id: str) -> str:
