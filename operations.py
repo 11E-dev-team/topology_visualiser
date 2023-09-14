@@ -2,21 +2,19 @@ from config import expect_lib
 
 # from pexpect import popen_spawn
 import re
-import time
 
 
-def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 5) -> expect_lib.spawn:
+def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 10) -> expect_lib.spawn:
     if pxp is None:
-        pxp = expect_lib.spawn(f"ssh {login}@{ip}")
+        pxp = expect_lib.spawn(f"ssh {login}@{ip}", timeout=10)
     else:
         pxp.expect("$")
         print("На бызовом устройстве")
         print("Подключение дальше по ssh")
         pxp.sendline(f"ssh {login}@{ip}")
-    time.sleep(5)
     result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
     reconections = 2
-    while (result == -1) or (reconections > max_reconnections):
+    while (result == 1) or (reconections > max_reconnections):
         print(f"Попытка подключения {reconections}/{max_reconnections}")
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
     if reconections > max_reconnections:
@@ -86,13 +84,13 @@ def enter_privileged_mode(pxp: expect_lib.spawn):
     print("Accesed")
 
 
-def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 5) -> str:
+def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 10) -> str:
     print("Получение данныx с устройства...")
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
     result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     reconections = 2
-    while (result == -1) or (reconections > max_reconnections):
+    while (result == 1) or (reconections > max_reconnections):
         print(f"Попытка подключения {reconections}/{max_reconnections}")
         result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     if reconections > max_reconnections:
