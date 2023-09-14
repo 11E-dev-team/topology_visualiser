@@ -98,9 +98,9 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         to_write += ';'.join(
             (';'.join(device_a),
             ';'.join(device_b))
-        ) + "\n"
+        )
     with open(connections_snapshot_path(snapshot_id), "a+") as f:
-        f.write(to_write[:-1])
+        f.write(to_write)
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
     print (f"Редактирование обараза {snapshot_id} (устройства)")
@@ -108,15 +108,14 @@ def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
         text = f.read()
     to_write  = ""
     for device in devices:
-        if device["device_id"] not in text:
+        if device["ip"] not in text:
             to_write += (device["device_id"]
                         + ";" + device["ip"]
                         + ";" + device["software"]
                         + ";" + device["version"]
-                        + "\n"
             )
     with open(net_snapshot_path(snapshot_id), "a+") as f:
-        f.write(to_write[:-1])
+        f.write(to_write)
     file = read_csv(net_snapshot_path(snapshot_id), sep=";")
     file = file.sort_values(by=["Device ID", "IP address"])
     file.to_csv(net_snapshot_path(snapshot_id), sep=";", index=0)
