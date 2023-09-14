@@ -15,7 +15,7 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
         pxp.sendline(f"ssh {login}@{ip}")
     result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
     reconections = 2
-    while (result == 1) or (reconections > max_reconnections):
+    while (result == 2) or (reconections > max_reconnections):
         print(f"Попытка подключения {reconections}/{max_reconnections}")
         time.sleep(reconections)
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
