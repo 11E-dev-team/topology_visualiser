@@ -51,29 +51,31 @@ def net_snapshot_path(snapshot_id: str):
 
 def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tuple]):
     print (f"Редактирование образа {snapshot_id}")
-    with open(connections_snapshot_path(snapshot_id), "a+") as f:
-        text = f.read()
+    to_write = ""
+    print("Запись:\n", connections)
     for device_a, device_b in connections:
-        to_write = ';'.join(
+        to_write += ';'.join(
             (';'.join(device_a),
             ';'.join(device_b))
-        )
-        with open(connections_snapshot_path(snapshot_id), "a+") as f:
-            f.write(to_write)
+        ) + "\n"
+    with open(connections_snapshot_path(snapshot_id), "a+") as f:
+        f.write(to_write[:-1])
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
     print (f"Редактирование обараза {snapshot_id}")
     with open(net_snapshot_path(snapshot_id), "a+") as f:
         text = f.read()
+    to_write  = ""
     for device in devices:
         if device["device_id"] not in text:
-            to_write = (device["device_id"]
+            to_write += (device["device_id"]
                         + ";" + device["ip"]
                         + ";" + device["software"]
                         + ";" + device["version"]
+                        + "\n"
             )
-            with open(net_snapshot_path(snapshot_id), "a+") as f:
-                f.write(to_write)
+    with open(net_snapshot_path(snapshot_id), "a+") as f:
+        f.write(to_write[:-1])
 
 def select_device(snapshot_id: str) -> str:
     file = read_csv(net_snapshot_path(snapshot_id), sep=";")
