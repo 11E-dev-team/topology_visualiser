@@ -129,7 +129,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
              connections_buffer: list=None, devices_buffer: list=None):
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp)
     #enter_privileged_mode(pxp)
-    stack = parse_neighbors(get_neig_data(pxp)) 
+    stack = parse_neighbors(get_neig_data(pxp))
     visited = [entry_ip]
     print('Анализ сети')
     pxp.sendline('exit')
@@ -154,11 +154,12 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
                 stack.append(neigh)
             elif neigh['ip'] not in visited:
                 stack.append(neigh)
-                
+
             if send_connections:
-                name_in = f'{device["ip"]} - {device["device_id"]}'
-                name_out = f'{neigh["ip"]} - {neigh["device_id"]}'
-                yield ((name_in, neigh["port_id"]), (name_out, neigh["interface"]))
+                #name_in = f'{device["ip"]} - {device["device_id"]}'
+                #name_out = f'{neigh["ip"]} - {neigh["device_id"]}'
+                yield ((device["ip"], device["device_id"], neigh["port_id"]), 
+                        (neigh["ip"], neigh["device_id"], neigh["interface"]))
             if connections_buffer is not None:
                 connections_buffer.append(
                     ((device["ip"], device["device_id"], neigh["port_id"]), 
