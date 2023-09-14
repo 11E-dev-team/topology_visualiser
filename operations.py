@@ -15,7 +15,7 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
         pxp.sendline(f"ssh {login}@{ip}")
     time.sleep(5)
     result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
-    reconections = 1
+    reconections = 2
     while (result == -1) or (reconections > max_reconnections):
         print(f"Попытка подключения {reconections}/{max_reconnections}")
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
@@ -90,10 +90,10 @@ def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 5) -> str:
     print("Получение данныx с устройства...")
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
-    pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
-    reconections = 1
+    result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
+    reconections = 2
     while (result == -1) or (reconections > max_reconnections):
-        print(f"Ожидание ответа")
+        print(f"Попытка подключения {reconections}/{max_reconnections}")
         result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     if reconections > max_reconnections:
         print("Попытка подключения не удалась")
