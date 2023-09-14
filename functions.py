@@ -33,7 +33,7 @@ def select_snapshot(snapshots=None) -> str:
     if snapshots == None:
         snapshots = os.listdir('snapshots')
         all_snapshots = [
-            s[len("net_snapshot"):-len(".csv")]
+            s[len("net_snapshot")-1:-len(".csv")]
             for s in snapshots
             if s.startswith('net_')
         ]
