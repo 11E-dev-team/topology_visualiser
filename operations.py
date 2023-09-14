@@ -5,7 +5,7 @@ import re
 import time
 
 
-def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconections: int = 5) -> expect_lib.spawn:
+def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 5) -> expect_lib.spawn:
     if pxp is None:
         pxp = expect_lib.spawn(f"ssh {login}@{ip}")
     else:
@@ -16,10 +16,10 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
     time.sleep(5)
     result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
     reconections = 1
-    while (result == -1) or (reconections > max_reconections):
-        print(f"Попытка подключения {reconections}/{max_reconections}")
+    while (result == -1) or (reconections > max_reconnections):
+        print(f"Попытка подключения {reconections}/{max_reconnections}")
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
-    if reconections > max_reconections:
+    if reconections > max_reconnections:
         print("Попытка подключения не удалась")
     if result == 1:
         pxp.sendline("yes")
@@ -86,14 +86,21 @@ def enter_privileged_mode(pxp: expect_lib.spawn):
     print("Accesed")
 
 
-def get_neig_data(pxp: expect_lib.spawn) -> str:
+def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 5) -> str:
     print("Получение данныx с устройства...")
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
-    pxp.expect("--.+$", re.DOTALL)
-    data = pxp.after
-    # pxp.expect([".*>", ".*#"])
-    print("Данные полученны")
+    pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
+    reconections = 1
+    while (result == -1) or (reconections > max_reconnections):
+        print(f"Ожидание ответа")
+        result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
+    if reconections > max_reconnections:
+        print("Попытка подключения не удалась")
+    if result == 1:
+        data = pxp.after
+        # pxp.expect([".*>", ".*#"])
+        print("Данные полученны")
     return data
 
 def parse_neighbors(output: str) -> dict:
