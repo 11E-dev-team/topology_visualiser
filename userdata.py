@@ -34,7 +34,6 @@ def read_user_data():
             line = line.strip('\n')
             ip, login, password, flag = line.split(';')
             data_by_ip[ip] = data_by_flag[flag] = [ip, login, password, flag]
-    print(data_by_flag)
     return data_by_ip, data_by_flag
 
 

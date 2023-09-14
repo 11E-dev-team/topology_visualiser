@@ -1,4 +1,4 @@
-from userdata import read_user_data, add_user_data
+from userdata import read_user_data, dump_user_data
 from getpass import getpass
 
 
@@ -44,8 +44,12 @@ def net_access_user_data():
         entry_login = input('login: ')
         entry_password = getpass('password: ')
 
-        add_user_data(outer_ip, outer_login, outer_password, '_outer')
-        add_user_data(entry_ip, entry_login, entry_password, '_entry')
+
+        dump_data = {
+            outer_ip: (outer_ip, outer_login, outer_password, '_outer'),
+            entry_ip: (entry_ip, entry_login, entry_password, '_entry')
+        }
+        dump_user_data(dump_data)
         print('Данные для входа сохранены')
 
     return {
