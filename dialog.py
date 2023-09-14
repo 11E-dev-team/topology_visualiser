@@ -24,9 +24,6 @@ def net_access_user_data():
         use_old_data = input('Использовать последние данные для входа в сеть?(Д/н): ') != 'н'
     else:
         use_old_data = False
-    
-   # print(user_data_flag)
-   # print(user_data_ip)
 
     if use_old_data:
         outer_ip, outer_login, outer_password, _ = user_data_flag['_outer']

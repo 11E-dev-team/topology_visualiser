@@ -1,6 +1,5 @@
 from config import expect_lib
 
-# from pexpect import popen_spawn
 import re
 import time
 
@@ -27,50 +26,6 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
     pxp.sendline(f"{password}")
     pxp.sendline("terminal length 0")
     return pxp
-
-
-# class DeviceInfo:
-#     ip_address: str
-#     device_id: str
-#     interface: str
-#     port_id: str
-
-#     software: str
-#     version: str
-
-# def start_telnet(ip: str, port: str):
-#     print(f"Подключение к {ip} {port}...")
-#     pxp = expect_lib.spawn(f"telnet {ip} {port}")
-#     # pxp.expect("Escape")
-#     pxp.sendline("\n")
-#     result = pxp.expect([".*>", ".*#", expect_lib.TIMEOUT])
-#     if result == -1:
-#         print("TIMEOUT")
-#     else:
-#         print(f"Подключен к {ip} {port}")
-#     if result == 0:
-#         enter_privileged_mode(pxp)
-#     pxp.sendline("terminal length 0")
-#     pxp.expect([".*>", ".*#"])
-#     print("Включен режим полного вывода")
-#     return pxp
-
-# def start_telnet(ip: str, port: str):
-#     print(f"Подключение к {ip} {port}...")
-#     pxp = expect_lib.spawn(f"telnet {ip} {port}")
-#     # pxp.expect("Escape")
-#     pxp.sendline("\n")
-#     result = pxp.expect([".*>", ".*#", expect_lib.TIMEOUT])
-#     if result == -1:
-#         print("TIMEOUT")
-#     else:
-#         print(f"Подключен к {ip} {port}")
-#     if result == 0:
-#         enter_privileged_mode(pxp)
-#     pxp.sendline("terminal length 0")
-#     pxp.expect([".*>", ".*#"])
-#     print("Включен режим полного вывода")
-#     return pxp
 
 
 def enter_privileged_mode(pxp: expect_lib.spawn):
@@ -102,7 +57,6 @@ def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 10) -> str:
         print("Попытка подключения не удалась")
     if result == 0:
         data = pxp.after
-        # pxp.expect([".*>", ".*#"])
         print("Данные полученны")
     return data
 
@@ -128,7 +82,6 @@ def parse_neighbors(output: str) -> dict:
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
              connections_buffer: list=None, devices_buffer: list=None):
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp)
-    #enter_privileged_mode(pxp)
     stack = parse_neighbors(get_neig_data(pxp))
     visited = [entry_ip]
     print('Анализ сети')
@@ -138,13 +91,11 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
         device = stack.pop(0)
         if device["ip"] in visited:
             if device["ip"] == entry_ip:
-                #has_added_entry_point = True
                 if not send_connections:
                     yield device
             continue
         print(f'Подключение к {username}@{device["ip"]}')
         start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp)
-        #enter_privileged_mode(pxp)
         print('Подключено. Получение данных о соседях')
         neighs = parse_neighbors(get_neig_data(pxp))
         print('Обнаружено', len(neighs), 'соседей')
@@ -156,8 +107,6 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
                 stack.append(neigh)
 
             if send_connections:
-                #name_in = f'{device["ip"]} - {device["device_id"]}'
-                #name_out = f'{neigh["ip"]} - {neigh["device_id"]}'
                 yield ((device["ip"], device["device_id"], neigh["port_id"]), 
                         (neigh["ip"], neigh["device_id"], neigh["interface"]))
             if connections_buffer is not None:

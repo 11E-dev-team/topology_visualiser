@@ -1,5 +1,4 @@
 from topology_visualizer.igraph_topology_visualizer import IgraphTopologyVisualizer as default_visualizer
-# from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer as default_vizualizer
 
 import dialog
 import os
@@ -64,22 +63,7 @@ if __name__ == "__main__":
                 connections = {}
                 for key, value in fu.read_connections_snapshot(snapshot_id):
                     connections[key] = value
-                    # userdata = dialog.net_access_user_data()
-                    # outer_ip, outer_login, outer_password = userdata['outer']
-                    # entry_ip, entry_login, entry_password = userdata['entry']
 
-                    # main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
-                    # print('Подключение к первой машине в сети')
-
-                    # graphname = lambda ip, id, port: (f"{id} - {ip}", port)
-
-                    # connections = {graphname(key): graphname(value)
-                    #                 for key, value in op.roam_net(
-                    #     pxp=main_pxp, entry_ip=entry_ip, username=entry_login, 
-                    #     password=entry_password, send_connections=True
-                    # )}
-                #print(connections)
-                #print(connections)
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
                 graphname = lambda ip, id, port: (f"{id} - {ip}", port)
                 gtv = GraphvizTopologyVisualizer({
