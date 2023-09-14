@@ -11,14 +11,19 @@ def delete_snapshot(snapshot_id) -> str:
         os.remove(connections_snapshot_path(snapshot_id))
 
 def most_recent_snapshot() -> str:
-    with open('snaoshots/most_recent') as m:
+    with open('snapshots/most_recent') as m:
         mrs = m.read()
     return mrs
 
 def select_snapshot() -> str:
     snapshots = os.listdir('snapshots')
     c = 1
-    for snapshot in reversed(filter(lambda x: x.startswith('net'), snapshots)):
+    all_snapshots = [
+        s[len("net_snapshot"):-len(".csv")]
+        for s in snapshots
+        if s.startswith('net_')
+    ]
+    for snapshot in reversed(all_snapshots):
         print (f"{c} - {snapshot[len('net_snapshot'):-len('.csv')]}")
         c += 1
     answer = int(input(("Выберите снапшот: ")))

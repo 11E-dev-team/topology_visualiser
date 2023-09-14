@@ -56,7 +56,9 @@ if __name__ == "__main__":
             case "2":
                 print ("Построить топологию сети")
                 snapshot_id = snapshot_dialog()
-                connections = list(fu.read_connections_snapshot(snapshot_id))
+                connections = {}
+                for key, value in fu.read_connections_snapshot(snapshot_id):
+                    connections[key] = value
                     # userdata = dialog.net_access_user_data()
                     # outer_ip, outer_login, outer_password = userdata['outer']
                     # entry_ip, entry_login, entry_password = userdata['entry']
