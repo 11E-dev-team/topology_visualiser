@@ -97,11 +97,12 @@ def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 5) -> str:
         result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     if reconections > max_reconnections:
         print("Попытка подключения не удалась")
-    if result == 1:
+    if result == 0:
         data = pxp.after
         # pxp.expect([".*>", ".*#"])
         print("Данные полученны")
     return data
+
 
 def parse_neighbors(output: str) -> dict:
     matches = []
@@ -119,6 +120,7 @@ def parse_neighbors(output: str) -> dict:
         if match:
             matches.append(match.groupdict())
     return matches
+
 
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
              connections_buffer: list=None, devices_buffer: list=None):

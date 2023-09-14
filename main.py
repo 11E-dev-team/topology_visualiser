@@ -8,6 +8,7 @@ import functions as fu
 import operations as op
 from getpass import getpass
 
+
 def snapshot_dialog():
     snapshots = fu.get_snapshots()
     if not snapshots:
@@ -21,7 +22,6 @@ def snapshot_dialog():
                 return fu.most_recent_snapshot()
             case "3":
                 return fu.select_snapshot(snapshots)
-
                 
 
 def create_new_snapshot():
@@ -49,6 +49,7 @@ def create_new_snapshot():
         fu.delete_snapshot(snapshot_id)
         print('[!] Произошла ошибка при создании образа сети. Битые образы удалены')
         raise e
+
 
 if __name__ == "__main__":
     while True:

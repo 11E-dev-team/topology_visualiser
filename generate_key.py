@@ -1,9 +1,9 @@
 from cryptography.fernet import Fernet
 
+
 def regenerate_key():
     with open('.secret_key', mode='wb') as key:
         key.write(Fernet.generate_key())
-
 
 
 if __name__ == '__main__':
