@@ -6,9 +6,17 @@ from typing import Iterable
 
 def select_snapshot() -> str:
     snapshots = os.listdir('snapshots')
-    snapshots.remove('most_recent')
     c = 1
-    for snapshot in snapshots:
+    for snapshot in filter(lambda x: x.startswith('net'), snapshots):
+        print (f"{c} - {snapshot}")
+        c += 1
+    answer = int(input(("Выберите снапшот: ")))
+    return snapshots[answer-1]
+
+def select_connections_snapshot() -> str:
+    snapshots = os.listdir('snapshots')
+    c = 1
+    for snapshot in filter(lambda x: x.startswith('connections'), snapshots):
         print (f"{c} - {snapshot}")
         c += 1
     answer = int(input(("Выберите снапшот: ")))
@@ -90,3 +98,9 @@ def select_params(snapshot_name: str) -> str:
 def get_data (snapshot_name, device_id, param) -> str:
     file = read_csv(f"snapshots/{snapshot_name}", sep=";", index_col=['Device ID'])
     print (file[param][device_id])
+
+def read_connections_snapshot(snapshot_name):
+    with open(snapshot_name) as f:
+        for line in f.readlines()[1:]:
+            args = line.strip(';')
+            yield (tuple(args[:2]), tuple(args[2:]))

@@ -34,20 +34,25 @@ if __name__ == "__main__":
 
             case "2":
                 print ("Построить топологию сети")
-                userdata = dialog.net_access_user_data()
-                outer_ip, outer_login, outer_password = userdata['outer']
-                entry_ip, entry_login, entry_password = userdata['entry']
+                use_snapshot_data = input('Использовать снапшот сети? (Д/н): ') != 'н'
+                if use_snapshot_data:
+                    snapshot_connections_name = fu.select_connections_snapshot()
+                    connections = list(fu.read_connections_snapshot())
+                else:
+                    userdata = dialog.net_access_user_data()
+                    outer_ip, outer_login, outer_password = userdata['outer']
+                    entry_ip, entry_login, entry_password = userdata['entry']
 
-                main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
-                print('Подключение к первой машине в сети')
+                    main_pxp = op.start_ssh(outer_ip, outer_login, outer_password)
+                    print('Подключение к первой машине в сети')
 
-                graphname = lambda ip, id, port: (f"{id} - {ip}", port)
+                    graphname = lambda ip, id, port: (f"{id} - {ip}", port)
 
-                connections = {graphname(key): graphname(value)
-                                for key, value in op.roam_net(
-                    pxp=main_pxp, entry_ip=entry_ip, username=entry_login, 
-                    password=entry_password, send_connections=True
-                )}
+                    connections = {graphname(key): graphname(value)
+                                    for key, value in op.roam_net(
+                        pxp=main_pxp, entry_ip=entry_ip, username=entry_login, 
+                        password=entry_password, send_connections=True
+                    )}
                 print(connections)
                 for key, value in list(connections.items()):
                     if value in connections:
