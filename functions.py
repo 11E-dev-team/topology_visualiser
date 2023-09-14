@@ -133,5 +133,5 @@ def read_connections_snapshot(snapshot_id):
         res = []
         for line in f.readlines()[1:]:
             args = line.split(';')
-            res.append(tuple(args[:3]), tuple(args[3:]))
+            res.append((tuple(args[:3]), tuple(args[3:])))
         return res
