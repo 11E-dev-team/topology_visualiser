@@ -76,7 +76,7 @@ def test2 ():
 
         advertisement version: 2
         VTP Management Domain: 'VLANchiki'
-        Native VLAN: 1
+        Native VLAN: 1 
         Duplex: full
         Management address(es): 
         IP address: 192.168.0.8

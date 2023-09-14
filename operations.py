@@ -14,7 +14,9 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
         print("Подключение дальше по ssh")
         pxp.sendline(f"ssh {login}@{ip}")
     time.sleep(5)
-    result = pxp.expect(["password:", "(yes/no)"])
+    result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
+    while result == -1:
+        result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
     if result == 1:
         pxp.sendline("yes")
     pxp.sendline(f"{password}")
