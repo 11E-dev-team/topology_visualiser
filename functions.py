@@ -28,7 +28,6 @@ def get_snapshots() -> str:
 def select_snapshot(snapshots=None) -> str:
     if snapshots == None:
         snapshots = os.listdir('snapshots')
-        c = 1
         all_snapshots = [
             s[len("net_snapshot"):-len(".csv")]
             for s in snapshots
@@ -36,6 +35,7 @@ def select_snapshot(snapshots=None) -> str:
         ]
     else:
         all_snapshots = snapshots
+    c = 1
     for snapshot in reversed(all_snapshots):
         print (f"{c} - {snapshot[len('net_snapshot'):-len('.csv')]}")
         c += 1
