@@ -1,5 +1,7 @@
 from topology_visualizer.base_topology_visualizer import TopologyVisualizer
 
+import os
+
 DEFAULT_GRAPH_STYLE = {
     "graph": {
         "label": "Network Map",
@@ -34,8 +36,8 @@ class GraphvizTopologyVisualizer(TopologyVisualizer):
             import graphviz as gv
         except ModuleNotFoundError:
             print("Установите модуль graphviz:")
-            print("1. pip install graphviz")
-            print("2. sudo apt install graphviz")
+            print("1. Введите pip install graphviz")
+            print("2. Скачайте https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/windows_10_cmake_Release_graphviz-install-9.0.0-win64.exe")
             return None
 
         def apply_styles(graph, styles):
@@ -57,8 +59,9 @@ class GraphvizTopologyVisualizer(TopologyVisualizer):
                 + list(self.topology.values())
             ]
         )
-        graphs = gv.Graph(format="svg"), gv.Graph(format="png")
-
+        fileformat = filename.split('.')[-1]
+        graphs = (gv.Graph(format=fileformat),)
+        filename = os.path.join('images',  filename)
         for graph in graphs:
             for node in nodes:
                 graph.node(node)
