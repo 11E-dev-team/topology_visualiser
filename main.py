@@ -81,7 +81,7 @@ if __name__ == "__main__":
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
                 graphname = lambda ip, id, port: (f"{id} - {ip}", port)
                 gtv = GraphvizTopologyVisualizer({
-                    graphname(key): graphname(value) 
+                    graphname(*key): graphname(*value) 
                     for key, value in connections.items()
                 })
                 gtv.draw(input('Имя файла изображения: '))

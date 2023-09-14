@@ -104,5 +104,5 @@ def get_data (snapshot_id, device_id, param) -> str:
 def read_connections_snapshot(snapshot_id):
     with open(connections_snapshot_path(snapshot_id)) as f:
         for line in f.readlines()[1:]:
-            args = line.strip(';')
-            yield (tuple(args[:2]), tuple(args[2:]))
+            args = line.split(';')
+            yield (tuple(args[:3]), tuple(args[3:]))
