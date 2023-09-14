@@ -137,8 +137,8 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
     while stack:
         device = stack.pop(0)
         if device["ip"] in visited:
-            if device["ip"] == entry_ip and not has_added_entry_point:
-                has_added_entry_point = True
+            if device["ip"] == entry_ip:
+                #has_added_entry_point = True
                 if not send_connections:
                     yield device
             continue
@@ -149,7 +149,10 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
         neighs = parse_neighbors(get_neig_data(pxp))
         print('Обнаружено', len(neighs), 'соседей')
         for neigh in neighs:
-            if neigh['ip'] not in visited:
+            if neigh['ip'] == entry_ip and not has_added_entry_point:
+                has_added_entry_point = True
+                stack.append(neigh)
+            elif neigh['ip'] not in visited:
                 stack.append(neigh)
             else:
                 if send_connections:
