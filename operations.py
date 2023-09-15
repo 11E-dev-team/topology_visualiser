@@ -98,7 +98,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
             continue
         print(f'Подключение к {username}@{device["ip"]}')
         start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp,
-                  max_reconnections=int(settings.get_setting('recconect')))
+                  max_reconnections=int(settings.get_setting('reconnect')))
         print('Подключено. Получение данных о соседях')
         neighs = parse_neighbors(get_neig_data(pxp))
         print('Обнаружено', len(neighs), 'соседей')
