@@ -92,7 +92,7 @@ if __name__ == "__main__":
                     print('Выберите параметр: ')
                     for ind, key in enumerate(keys):
                         if key == 'verbose':
-                            print(ind+1, '-', key, f"[{stgdict[key]+1}]")
+                            print(ind+1, '-', key, f"[{int(stgdict[key])+1}]")
                         else:
                             print(ind+1, '-', key, f"[{stgdict[key]}]")
                     opt = input()
