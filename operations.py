@@ -83,6 +83,7 @@ def parse_neighbors(output: str) -> dict:
 
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
              connections_buffer: list=None, devices_buffer: list=None):
+    log_print(f'Подключение к {username}@{entry_ip}', level=0)
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp, 
               max_reconnections=int(settings.get_setting('reconnect')))
     stack = parse_neighbors(get_neig_data(pxp))
@@ -119,6 +120,8 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
                         (neigh["ip"], neigh["device_id"], neigh["interface"]))
                 )
         visited.append(device['ip'])
+        log_print('| stack:', [dev['ip'] for dev in stack], level=2)
+        log_print('| visited:', visited, level=2)
         if not send_connections:
             yield device
         if devices_buffer is not None:

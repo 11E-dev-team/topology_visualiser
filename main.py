@@ -65,7 +65,12 @@ if __name__ == "__main__":
                 connections = {}
                 for key, value in fu.read_connections_snapshot(snapshot_id):
                     connections[key] = value
-
+                log_print('| connections:', 
+                        '\n|             '.join(
+                            [str((key, value)) 
+                             for key, value in connections.items()]
+                ),
+                level=2)
                 from topology_visualizer.graphviz_topology_visualizer import GraphvizTopologyVisualizer
                 graphname = lambda ip, id, port: (f"{id} - {ip}", port)
                 gtv = GraphvizTopologyVisualizer({
@@ -86,25 +91,26 @@ if __name__ == "__main__":
                 while True:
                     print('Выберите параметр: ')
                     for ind, key in enumerate(keys):
-                        print(ind, '-', key, f"[{stgdict[key]}]")
+                        print(ind+1, '-', key, f"[{stgdict[key]}]")
                     opt = input()
                     try:
-                        opt = keys[int(opt)]
+                        opt = keys[int(opt)-1]
                     except:
                         pass
                     if opt in keys:
                         break
                 while True:
                     if opt == 'verbose':
-                        print('Выберите значение:')
-                        print('0 - только необходимый вывод в консоль')
-                        print('1 - подробный вывод в консоль')
-                        print('2 - очень подробный вывод в консоль')
+                        print(f'Выберите значение параметра {opt}:')
+                        print('1 - Только необходимый вывод в консоль')
+                        print('2 - Подробный вывод в консоль')
+                        print('3 - Очень подробный вывод в консоль')
                         val = input()
-                        if val == '0' or val == '1' or val == '2':
+                        if val == '1' or val == '2' or val == '3':
+                            val = str(int(val)-1)
                             break
                     else:
-                        print('Впишите значение параметра:')
+                        print(f'Впишите значение параметра {opt}:')
                         val = input()
                         if val.isdigit():
                             break
