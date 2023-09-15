@@ -1,6 +1,6 @@
 from userdata import read_user_data, dump_user_data
 from getpass import getpass
-
+from prints import log_print
 
 main = """
 1 - Сделать образ сети
@@ -46,7 +46,7 @@ def net_access_user_data():
             entry_ip: (entry_ip, entry_login, entry_password, '_entry')
         }
         dump_user_data(dump_data)
-        print('Данные для входа сохранены')
+        log_print('Данные для входа сохранены', level=1)
 
     return {
             'outer': (outer_ip, outer_login, outer_password),

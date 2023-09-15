@@ -7,6 +7,7 @@ import functions as fu
 import operations as op
 from getpass import getpass
 import settings
+from prints import log_print
 
 
 def snapshot_dialog():
@@ -44,7 +45,7 @@ def create_new_snapshot():
 
         fu.add_data_to_snapshot(snapshot_id, data_iterator)
         fu.add_connections_data_to_snapshot(snapshot_id, connections_buffer)
-        print(f'Образ сети с {snapshot_id} сохранён')
+        log_print(f'Образ сети с {snapshot_id} сохранён', level=0)
         return snapshot_id
     except Exception as e:
         fu.delete_snapshot(snapshot_id)
@@ -81,12 +82,16 @@ if __name__ == "__main__":
                 print (fu.get_data(snapshot_id, device_ip, param))
             case "4":
                 stgdict = settings.read_settings()
-                keys = stgdict.keys()
+                keys = list(stgdict.keys())
                 while True:
                     print('Выберите параметр: ')
-                    for key in keys:
-                        print(key, f"[{stgdict[key]}]")
+                    for ind, key in enumerate(keys):
+                        print(ind, '-', key, f"[{stgdict[key]}]")
                     opt = input()
+                    try:
+                        opt = keys[int(opt)]
+                    except:
+                        pass
                     if opt in keys:
                         break
                 while True:

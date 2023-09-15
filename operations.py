@@ -3,6 +3,7 @@ from config import expect_lib
 import re
 import time
 import settings
+from prints import log_print
 
 
 def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 10) -> expect_lib.spawn:
@@ -10,18 +11,18 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
         pxp = expect_lib.spawn(f"ssh {login}@{ip}", timeout=10)
     else:
         pxp.expect("$")
-        print("На бызовом устройстве")
-        print("Подключение дальше по ssh")
+        log_print("На базовом устройстве", level=1)
+        log_print("Подключение по ssh внутрь сети", level=1)
         pxp.sendline(f"ssh {login}@{ip}")
     reconections = 0
     result = 2
     while (result == 2) or (reconections > max_reconnections):
         reconections += 1
-        print(f"Попытка подключения {reconections}/{max_reconnections}")
+        log_print(f"Попытка подключения {reconections}/{max_reconnections}", level=0)
         time.sleep(reconections * 5)
         result = pxp.expect(["password:", "(yes/no)", expect_lib.TIMEOUT])
     if reconections > max_reconnections:
-        print("Попытка подключения не удалась")
+        log_print("Попытка подключения не удалась", level=0)
     if result == 1:
         pxp.sendline("yes")
     pxp.sendline(f"{password}")
@@ -30,7 +31,7 @@ def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None =
 
 
 def enter_privileged_mode(pxp: expect_lib.spawn):
-    print("Вход в привелигированный режим...")
+    log_print("Вход в привелигированный режим...", level=0)
     pxp.sendline("enable")
     result = pxp.expect([".*#", "Password"])
     match result:
@@ -40,25 +41,25 @@ def enter_privileged_mode(pxp: expect_lib.spawn):
             pxp.sendline("cisco")
             pxp.expect(".*#")
 
-    print("Допущен")
+    log_print("Допущен", level=0)
 
 
 def get_neig_data(pxp: expect_lib.spawn, max_reconnections: int = 10) -> str:
-    print("Получение данныx с устройства...")
+    log_print("Получение данныx с устройства...", level=1)
     pxp.sendline("terminal length 0")
     pxp.sendline("show cdp neig det")
     result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
     reconections = 2
     while (result == 1) or (reconections > max_reconnections):
-        print(f"Попытка подключения {reconections}/{max_reconnections}")
+        log_print(f"Попытка подключения {reconections}/{max_reconnections}", level=0)
         time.sleep(reconections)
         result = pxp.expect(["--.+$", expect_lib.TIMEOUT], re.DOTALL)
         reconections += 1
     if reconections > max_reconnections:
-        print("Попытка подключения не удалась")
+        log_print("Попытка подключения не удалась", level=0)
     if result == 0:
         data = pxp.after
-        print("Данные полученны")
+        log_print("Данные полученны", level=1)
     return data
 
 
@@ -86,7 +87,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
               max_reconnections=int(settings.get_setting('recconect')))
     stack = parse_neighbors(get_neig_data(pxp))
     visited = [entry_ip]
-    print('Анализ сети')
+    log_print('Анализ сети', level=1)
     pxp.sendline('exit')
     has_added_entry_point = False
     while stack:
@@ -96,12 +97,12 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
                 if not send_connections:
                     yield device
             continue
-        print(f'Подключение к {username}@{device["ip"]}')
+        log_print(f'Подключение к {username}@{device["ip"]}', level=0)
         start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp,
-                  max_reconnections=int(settings.get_setting('recconect')))
-        print('Подключено. Получение данных о соседях')
+                  max_reconnections=int(settings.get_setting('reconnect')))
+        log_print('Подключено. Получение данных о соседях', level=1)
         neighs = parse_neighbors(get_neig_data(pxp))
-        print('Обнаружено', len(neighs), 'соседей')
+        log_print('Обнаружено', len(neighs), 'соседей', level=1)
         for neigh in neighs:
             if neigh['ip'] == entry_ip and not has_added_entry_point:
                 has_added_entry_point = True
@@ -122,5 +123,5 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
             yield device
         if devices_buffer is not None:
             devices_buffer.append(device)
-        print('Возврат к внешней машине')
+        log_print('Возврат к внешней машине', level=1)
         pxp.sendline('exit')

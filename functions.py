@@ -5,6 +5,7 @@ import os
 from typing import Iterable
 from math import ceil
 
+from prints import log_print
 import settings
 
 
@@ -77,7 +78,7 @@ def select_snapshot(snapshots=None) -> str:
 
 
 def create_snapshot() -> str:
-    print ("Создание образа сети")
+    log_print("Создание образа сети", level=1)
     if not os.path.isdir("snapshots"):
         os.mkdir("snapshots")
     snapshot_id = str(datetime.datetime.now()).replace(':', '-')
@@ -115,7 +116,7 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         f.write(to_write[:-1])
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
-    print (f"Редактирование обараза {snapshot_id} (устройства)")
+    log_print (f"Редактирование обараза {snapshot_id} (устройства)", level=1)
     with open(net_snapshot_path(snapshot_id), "a+") as f:
         text = f.read()
     to_write  = ""
