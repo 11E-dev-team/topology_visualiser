@@ -7,6 +7,7 @@ from math import ceil
 
 from prints import log_print
 import settings
+from dialog import COLORED_PRINT as cp
 
 
 def delete_snapshot(snapshot_id) -> str:
@@ -101,7 +102,7 @@ def net_snapshot_path(snapshot_id: str):
 
 
 def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tuple]):
-    print (f"Редактирование образа {snapshot_id}")
+    print (f"Редактирование образа {cp['INF']}{snapshot_id}{cp['ENDC']}")
     to_write = ""
     seen = set()
     for device_a, device_b in connections:
@@ -116,7 +117,7 @@ def add_connections_data_to_snapshot(snapshot_id: str, connections: Iterable[tup
         f.write(to_write[:-1])
 
 def add_data_to_snapshot(snapshot_id: str, devices: Iterable[dict]):
-    log_print (f"Редактирование обараза {snapshot_id} (устройства)", level=1)
+    log_print (f"Редактирование обараза {cp['INF']}{snapshot_id}{cp['ENDC']} (устройства)", level=1)
     with open(net_snapshot_path(snapshot_id), "a+") as f:
         text = f.read()
     to_write  = ""

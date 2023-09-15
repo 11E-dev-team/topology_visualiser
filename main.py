@@ -8,6 +8,7 @@ import operations as op
 from getpass import getpass
 import settings
 from prints import log_print
+from dialog import COLORED_PRINT as cp
 
 
 def snapshot_dialog():
@@ -45,7 +46,7 @@ def create_new_snapshot():
 
         fu.add_data_to_snapshot(snapshot_id, data_iterator)
         fu.add_connections_data_to_snapshot(snapshot_id, connections_buffer)
-        log_print(f'Образ сети с {snapshot_id} сохранён', level=0)
+        log_print(f'Образ сети с {cp["INF"]}{snapshot_id}{cp["ENDC"]} сохранён', level=0)
         return snapshot_id
     except Exception as e:
         fu.delete_snapshot(snapshot_id)

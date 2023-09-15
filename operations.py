@@ -4,6 +4,7 @@ import re
 import time
 import settings
 from prints import log_print
+from dialog import COLORED_PRINT as cp
 
 
 def start_ssh(ip: str, login: str, password: str, pxp: expect_lib.spawn | None = None, max_reconnections: int = 10) -> expect_lib.spawn:
@@ -83,7 +84,7 @@ def parse_neighbors(output: str) -> dict:
 
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
              connections_buffer: list=None, devices_buffer: list=None):
-    log_print(f'Подключение к {username}@{entry_ip}', level=0)
+    log_print(f'Подключение к {cp["IMP"]}{username}@{entry_ip}{cp["ENDC"]}', level=0)
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp, 
               max_reconnections=int(settings.get_setting('reconnect')))
     stack = parse_neighbors(get_neig_data(pxp))
@@ -98,7 +99,7 @@ def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str,
                 if not send_connections:
                     yield device
             continue
-        log_print(f'Подключение к {username}@{device["ip"]}', level=0)
+        log_print(f'Подключение к {cp["IMP"]}{username}@{device["ip"]}{cp["ENDC"]}', level=0)
         start_ssh(ip=device['ip'], login=username, password=password, pxp=pxp,
                   max_reconnections=int(settings.get_setting('reconnect')))
         log_print('Подключено. Получение данных о соседях', level=1)

@@ -2,6 +2,12 @@ from userdata import read_user_data, dump_user_data
 from getpass import getpass
 from prints import log_print
 
+COLORED_PRINT = {
+    "IMP": "\033[1;32m",
+    "INF": "\033[1;33;40m",
+    "ENDC": "\033[m"
+}
+
 main = """
 1 - Сделать образ сети
 2 - Построить топологию сети
