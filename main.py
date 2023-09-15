@@ -91,7 +91,10 @@ if __name__ == "__main__":
                 while True:
                     print('Выберите параметр: ')
                     for ind, key in enumerate(keys):
-                        print(ind+1, '-', key, f"[{stgdict[key]}]")
+                        if key == 'verbose':
+                            print(ind+1, '-', key, f"[{stgdict[key]+1}]")
+                        else:
+                            print(ind+1, '-', key, f"[{stgdict[key]}]")
                     opt = input()
                     try:
                         opt = keys[int(opt)-1]
@@ -108,14 +111,16 @@ if __name__ == "__main__":
                         val = input()
                         if val == '1' or val == '2' or val == '3':
                             val = str(int(val)-1)
+                            print(f'Настройке {opt} установлено значение {val+1}')
                             break
                     else:
                         print(f'Впишите значение параметра {opt}:')
                         val = input()
                         if val.isdigit():
+                            print(f'Настройке {opt} установлено значение {val}')
                             break
                 settings.set_setting(opt, val)
-                print(f'Настройке {opt} установлено значение {val}')
+                
 
 
             case "0":
