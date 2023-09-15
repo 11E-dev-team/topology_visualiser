@@ -112,7 +112,7 @@ if __name__ == "__main__":
                         val = input()
                         if val == '1' or val == '2' or val == '3':
                             val = str(int(val)-1)
-                            print(f'Настройке {opt} установлено значение {int(val)+1}')
+                            print(f'Настройке {opt} установлено значение {val+1}')
                             break
                     else:
                         print(f'Впишите значение параметра {opt}:')
