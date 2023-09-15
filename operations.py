@@ -84,7 +84,7 @@ def parse_neighbors(output: str) -> dict:
 def roam_net(pxp: expect_lib.spawn, entry_ip: str, username: str, password: str, send_connections=False, 
              connections_buffer: list=None, devices_buffer: list=None):
     start_ssh(ip=entry_ip, login=username, password=password, pxp=pxp, 
-              max_reconnections=int(settings.get_setting('recconect')))
+              max_reconnections=int(settings.get_setting('reconnect')))
     stack = parse_neighbors(get_neig_data(pxp))
     visited = [entry_ip]
     log_print('Анализ сети', level=1)
